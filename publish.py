@@ -18,20 +18,18 @@ parser.add_argument('--no-push', action='store_true')
 
 args = parser.parse_args()
 
-print("--------PY 2---------")
-branch = subprocess.check_output("git rev-parse --abbrev-ref HEAD", shell=True)
-print("--------PY 3---------")
+print("---HELLO FROM OBSIDIAN->GITHUB PUBLISHER---")
 
+branch = subprocess.check_output("git rev-parse --abbrev-ref HEAD", shell=True)
 if branch != b"obsidian\n":
-    print("not on obsidian branch, exiting")
+    print("---NOT ON OBSIDIAN BRANCH; EXITING---")
     sys.exit(0)
 
-print("--------PY 4---------")
-header, *filenames = subprocess.check_output("git log -1 --stat --oneline --name-only",
-                                              shell=True).splitlines()
-print("--------PY 5---------")
+
+print("---STASHING CURRENT CHANGES---")
 subprocess.run("git stash -u", shell=True)
-print("--------PY 6---------")
+
+print("---RESETTING MASTER ONTO OBSIDIAN---")
 subprocess.run("git checkout master&&git reset --hard obsidian", shell=True)
 
 def get(x, i):
@@ -46,8 +44,8 @@ def transformLink(filename, match):
     if not file:
         file = os.path.basename(filename)
         file = file.removesuffix(".md")
-    file = file.replace("(", "\(")
-    file = file.replace(")", "\)")
+    file = file.replace("(", "\\(")
+    file = file.replace(")", "\\)")
     
     if paragraph:
         paragraph = re.sub(r"[\(\)]", "", paragraph)
@@ -56,13 +54,13 @@ def transformLink(filename, match):
         link = file
 
     link = link.replace(" ", "-")
-    return f"[[{text}\|{link}]]"
+    return f"[[{text}\\|{link}]]"
 
 def transformCallback(filename):
     return lambda match: transformLink(filename, match)
 
 try:
-    print("--------PY 7 FILES---------")
+    print("---EDITING FILES---")
     for filename in glob.glob("**/*.md", recursive=True):
         print(filename)
         with open(filename, mode="r+", encoding="utf-8") as file:
@@ -74,11 +72,13 @@ try:
                 file.seek(0)
                 file.write(ntext)
 
-    print("--------PY 8 END FILES--------")
-    subprocess.run("git add -A && git commit -m replace", shell=True)
-    print("--------PY 9---------")
+    print("---COMMITTING EDITS---")
+    subprocess.run("git add -A && git commit -m \"[AUTO] Published to GitHub\"", shell=True)
+    
     if not args.no_push:
+        print("---PUSHING EDITS---")
         subprocess.run("git push -f", shell=True)
 finally:
+    print("---RETURNING TO OBSIDIAN BRANCH AND UNSTASHING--")
     subprocess.run("git checkout obsidian&&git stash pop", shell=True)
-    print("--------PY 10---------")
+    print("---GOODBYE--")
