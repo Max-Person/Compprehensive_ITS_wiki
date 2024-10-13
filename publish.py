@@ -34,16 +34,29 @@ subprocess.run("git stash -u", shell=True)
 print("--------PY 6---------")
 subprocess.run("git checkout master&&git reset --hard obsidian", shell=True)
 
+def get(x, i):
+    return x[i] if len(x) > i else None
+
 def transformLink(filename, match):
-    link = match.group(1)
+    link : str = match.group(1).split("#")
     text = match.group(2)
-    if link.startswith("#"):
+    
+    file = get(link, 0)
+    paragraph = get(link, 1)
+    if not file:
         file = os.path.basename(filename)
         file = file.removesuffix(".md")
-        link = file + link
+    file = file.replace("(", "\(")
+    file = file.replace(")", "\)")
+    
+    if paragraph:
+        paragraph = re.sub(r"[\(\)]", "", paragraph)
+        link = file + "#" + paragraph
+    else:
+        link = file
+
     link = link.replace(" ", "-")
-    link = re.sub(r"[\(\)]", "", link)
-    return f"[[{text}|{link}]]"
+    return f"[[{text}\|{link}]]"
 
 def transformCallback(filename):
     return lambda match: transformLink(filename, match)
@@ -55,7 +68,7 @@ try:
         with open(filename, mode="r+", encoding="utf-8") as file:
             text = file.read()
             ntext = re.sub(r"!\[\[(.+)\]\]", r"[[/images/\1]]", text)  # ![[imagename]] --> [[/images/imagename]]
-            ntext = re.sub(r"\[\[(.+?)\|(.+?)\]\]", transformCallback(filename), ntext)  # [[fn|linkTitle]] -> [[linkTitle|fn]]
+            ntext = re.sub(r"\[\[(.+?)\\?\|(.+?)\]\]", transformCallback(filename), ntext)  # [[fn|linkTitle]] -> [[linkTitle\|fn]]
             ntext = re.sub(r"(?<!^)(?<!\s)(?=\n)(?!=\n)", "  ", ntext)  #two spaces at the end of same-paragraph line breaks
             if ntext != text:
                 file.seek(0)
