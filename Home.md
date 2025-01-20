@@ -107,7 +107,7 @@ DomainRDFWriter.saveDomain(
 
 #### Создание дерева решений
 
-Построение [[Дерево решений|дерева решений]] из .xml файла
+Построение [[Дерево (граф) решений|дерева решений]] из .xml файла
 ```java
 DecisionTree decisionTree = DecisionTreeXMLBuilder.fromXMLFile(filename);
 ```
