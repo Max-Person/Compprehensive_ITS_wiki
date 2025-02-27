@@ -48,7 +48,7 @@ def transformLink(filename, match):
     file = file.replace(")", "\\)")
     
     if paragraph:
-        paragraph = re.sub(r"[\(\)]", "", paragraph)
+        paragraph = re.sub(r"[\(,\.\)]", "", paragraph)
         link = file + "#" + paragraph
     else:
         link = file
