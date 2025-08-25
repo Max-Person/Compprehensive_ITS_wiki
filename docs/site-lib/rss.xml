@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Compprehensive ITS wiki]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>Compprehensive ITS wiki</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Mon, 25 Aug 2025 09:07:19 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 25 Aug 2025 09:07:13 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[Словари + RDF]]></title><description><![CDATA[WIP
+Эта статья является "скелетом" и еще не дописана.
+]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/словари-+-rdf.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Представления данных/Словари + RDF.md</guid><pubDate>Mon, 25 Aug 2025 08:40:46 GMT</pubDate></item><item><title><![CDATA[Об its_QuestionGen]]></title><description><![CDATA[its_Reasoner - компонент системы, служащий для построения структуры наводящих вопросов на основе деревьев решений, а также для реализации текстового взаимодействия с пользователем на основе этой структурыWIP
+Эта статья является "скелетом" и еще не дописана.
+]]></description><link>3.-наводящие-вопросы-(its_questiongen)/об-its_questiongen.html</link><guid isPermaLink="false">3. Наводящие вопросы (its_QuestionGen)/Об its_QuestionGen.md</guid><pubDate>Mon, 25 Aug 2025 08:40:34 GMT</pubDate></item><item><title><![CDATA[Об its_Reasoner]]></title><description><![CDATA[its_Reasoner - компонент системы, служащий для реализации вычислений по графам мыслительных процессов, как это описано в статьях <a data-href="Дерево (граф) решений" href="1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html" class="internal-link" target="_self" rel="noopener nofollow">Дерево (граф) решений</a>, <a data-href="Узлы" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html" class="internal-link" target="_self" rel="noopener nofollow">Узлы</a>, <a data-href="Выражения" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html" class="internal-link" target="_self" rel="noopener nofollow">Выражения</a>.WIP
+Эта статья является "скелетом" и еще не дописана.
+]]></description><link>2.-вычисления-(its_reasoner)/об-its_reasoner.html</link><guid isPermaLink="false">2. Вычисления (its_Reasoner)/Об its_Reasoner.md</guid><pubDate>Mon, 25 Aug 2025 08:40:04 GMT</pubDate></item><item><title><![CDATA[Об its_DomainModel]]></title><description><![CDATA[itsDomainModel - компонент, служащий основой для остальных компонентов Compprehensive ITS (its*), и отвечающий за создание и хранение необходимых моделей данных о предметной области.Здесь и ниже в этом разделе - различные обособленные примеры использования данного проекта. Описаны на Java, т.к. я думаю, что вы с большей вероятностью будете использовать именно ее (использование на Kotlin в принципе аналогично, и более просто)Создать <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">модель предметной области</a> из <a data-tooltip-position="top" aria-label="LOQI" data-href="LOQI" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html" class="internal-link" target="_self" rel="noopener nofollow">.loqi</a> файла:DomainModel domainModel = DomainLoqiBuilder.buildDomain(new FileReader(filename)); <br>Создать модель предметной области из папки с <a data-tooltip-position="top" aria-label="Словари + RDF" data-href="Словари + RDF" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/словари-+-rdf.html" class="internal-link" target="_self" rel="noopener nofollow">.csv словарями и RDF файлами</a>:DomainModel domainModel = DomainDictionariesRDFBuilder.buildDomain( directoryPath, Collections.emptySet() );
+Наполнить существующую модель данными из .loqi файла:domainModel.addMerge(DomainLoqiBuilder.buildDomain(new FileReader(newFilename)))
+Наполнить существующую модель данными из RDF:DomainRDFFiller.fillDomain( domainModel, ttlFilePath, //путь к .ttl файлу с RDF Collections.emptySet(), //или Set.of(DomainRDFFiller.Option.NARY_RELATIONSHIPS_OLD_COMPAT) someTtlBasePrefix //префикс, использующийся в .ttl файле - например RDFUtils.POAS_PREF );
+Запись в виде LOQI:DomainLoqiWriter.saveDomain( domainModel, new FileWriter(filename), Collections.emptySet() );
+Запись в виде RDF:DomainRDFWriter.saveDomain( domainModel, new FileWriter(filename), someTtlBasePrefix, //префикс, использующийся в .ttl файле - например RDFUtils.POAS_PREF Collections.emptySet() //или Set.of(DomainRDFWriter.Option.NARY_RELATIONSHIPS_OLD_COMPAT) );
+<br>Построение <a data-tooltip-position="top" aria-label="Дерево (граф) решений" data-href="Дерево (граф) решений" href="1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html" class="internal-link" target="_self" rel="noopener nofollow">дерева решений</a> из .xml файлаDecisionTree decisionTree = DecisionTreeXMLBuilder.fromXMLFile(filename);
+//Строим и валидируем составную модель (предметная область + теги + деревья решений) DomainSolvingModel domainSolvingModel = new DomainSolvingModel( directoryPath, DomainSolvingModel.BuildMethod.LOQI ); domainSolvingModel.validate(); //Получаем общую модель для под-области DomainModel subDomainModel = domainSolvingModel.getMergedTagDomain(someTagName); //Получаем модель для конкретной ситуации DomainModel situationDomain = DomainLoqiBuilder.buildDomain(new FileReader(situationFileName)); //Объединяем модель ситуации с моделью под-области - делаем ее полной situationDomain.addMerge(subDomainModel); //Валидируем модель ситуации situationDomain.validateAndThrow(); //Получаем дерево решений из составной модели DecisionTree decisionTree = domainSolvingModel.getDecisionTree(); //...проводим дальнейшие вычисления (см. its_Reasoner)
+]]></description><link>1.-модели-(its_domainmodel)/об-its_domainmodel.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Об its_DomainModel.md</guid><pubDate>Mon, 25 Aug 2025 08:34:17 GMT</pubDate></item><item><title><![CDATA[index]]></title><description><![CDATA[Данная вики описывает функционал и код проекта под общим названием Compprehensive ITS, созданных для организации автоматизированного обучения с помощью моделей мышления учащихся.Проекты Compprehensive ITS включают в себя несколько компонентов:
+<a data-tooltip-position="top" aria-label="https://github.com/Max-Person/its_DomainModel" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Max-Person/its_DomainModel" target="_self">its_DomainModel</a> - создание, валидация и преобразование моделей данных (модели данных о конкретных задачах, а также модели деревьев решений, решающих эти задачи).
+<br><a data-tooltip-position="top" aria-label="https://github.com/Max-Person/its_Reasoner" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Max-Person/its_Reasoner" target="_self">its_Reasoner</a> - вычисления (reasoning) на основе деревьев решений.
+<br><a data-tooltip-position="top" aria-label="https://github.com/Max-Person/its_QuestionGen" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Max-Person/its_QuestionGen" target="_self">its_QuestionGen</a> - создание наводящих вопросов на основе деревьев решений, текстовое взаимодействие с пользователем.
+<br>Данные компоненты задуманы для использования в качестве библиотек в других проектах, написанных на Java или Kotlin (подробнее про языки <a data-tooltip-position="top" aria-label="Java и Kotlin" data-href="#Java и Kotlin" href="index.html#Java_и_Kotlin_0" class="internal-link" target="_self" rel="noopener nofollow">ниже</a>), т.е. сами не несут исполняемого кода как такового.
+Подробнее о функционале, предоставляемым данными библиотеками, читайте в остальных частях вики (содержание можно видеть слева).Ниже - о том, как начать использовать данный проект.<br>Как автор данных проектов, я рекомендую использовать Maven + <a data-tooltip-position="top" aria-label="https://jitpack.io/" rel="noopener nofollow" class="external-link is-unresolved" href="https://jitpack.io/" target="_self">JitPack</a> для подключения проектов its_* как зависимостей в ваших собственных проектах.
+Для этого необходимо:
+1. В pom.xml своего проекта указать репозиторий JitPack:&lt;repositories&gt; &lt;repository&gt; &lt;id&gt;jitpack.io&lt;/id&gt; &lt;url&gt;https://jitpack.io&lt;/url&gt; &lt;/repository&gt;
+&lt;/repositories&gt;
+2. Также в pom.xml указать необходимые компоненты как зависимости:&lt;dependency&gt; &lt;groupId&gt;com.github.Max-Person&lt;/groupId&gt; &lt;artifactId&gt;its_DomainModel&lt;/artifactId&gt; &lt;version&gt;...&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt; &lt;groupId&gt;com.github.Max-Person&lt;/groupId&gt; &lt;artifactId&gt;its_Reasoner&lt;/artifactId&gt; &lt;version&gt;...&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt; &lt;groupId&gt;com.github.Max-Person&lt;/groupId&gt; &lt;artifactId&gt;its_QuestionGen&lt;/artifactId&gt; &lt;version&gt;...&lt;/version&gt;
+&lt;/dependency&gt; В качестве версии JitPack может принимать название ветки, тег (release tag), или хэш коммита. Для данных проектов я рекомендую указывать либо master-SNAPSHOT для получения самых последних изменений с master-ветки, либо хэш конкретного коммита (например самого нового), чтобы ваш проект не сломался с обновлением библиотек.
+В зависимости от ваших нужд, вам могут понадобиться не все из этих зависимостей.
+(например, its_QuestionGen может быть не нужен, если вы не взаимодействуете с системой задавания наводящих вопросов)
+its_Reasoner зависит от its_DomainModel, а its_QuestionGen зависит от них обоих. В связи с этим, вы можете указать только "наиболее дочернюю" зависимость, чтобы подтянуть и родительские тоже.
+(например, указать только its_Reasoner, чтобы подтянуть its_DomainModel) Однако если вы укажете все необходимые зависимости, это поможет вам более точно контролировать их версии.. 3. В IntelliJ IDEA надо обновить зависимости Maven (Maven -&gt; Reload All Maven Projects), и все, данный проект настроен для использования в качестве библиотеки.Note
+Обратите внимание, что JitPack собирает нужные артефакты только по запросу - т.е. когда вы подтягиваете зависимость. Это значит, что первое подобное подтягивание скорее всего займет несколько минут - JitPack-у нужно будет время на билд.
+После завершения такого долгого билда, в IDEA может отобразиться надпись "Couldn't aqcuire locks", как будто произошла ошибка - в этом случае просто обновитесь еще раз, это будет быстро.
+4. Вместе с артефактами данной библиотеки всегда доступен ее исходный код, а в нем и документация (kotlindoc/javadoc). Проект на 90% задокументирован, поэтому смотрите на документацию к используемым вами методам!
+Для того, чтобы исходный код и документация тоже подтянулись, нужно в IntelliJ IDEA сделать Maven -&gt; Download Sources and/or Documentation -&gt; Download Sources and DocumentationJitPack позволяет использовать GitHub-репозитории в качестве Maven-артефактов, а т.е. позволяет подтягивать Maven-зависимости прямо из репозиториев. Это кажется самым простым способом использовать данный проект.Тем не менее, если вы хотите иметь больше контроля над проектом (например если вы сошли с ума хотите поменять в нем какую-то логику), вы можете собрать его самостоятельно:
+Склонируйте необходимый репозиторий (или репозитории)
+Запустите установку mvn install
+(в IntelliJ IDEA: Maven -&gt; Имя проекта -&gt; Lifecycle -&gt; install)
+После установки проект появится как артефакт (соответствующий указанным в pom.xml данным) в вашем локальном Maven-репозитории (.m2)
+Укажите в вашем проекте соответствующую зависимость.
+Здесь вкратце о том, почему здесь все написано на Kotlin, и что с этим делать.Kotlin выбран для проекта без особых на то причин - когда он только начинался, мы посчитали что это будет хорошей возможностью познакомиться с новым языком. В принципе, об этом решении мы не пожалели - это оказался действительно интересный и приятный язык.<br>При этом, Kotlin компилируется под JVM, а значит, <a data-tooltip-position="top" aria-label="https://kotlinlang.org/docs/java-to-kotlin-interop.html" rel="noopener nofollow" class="external-link is-unresolved" href="https://kotlinlang.org/docs/java-to-kotlin-interop.html" target="_self">может быть вызван из Java-кода</a>. Это значит, что использование данных библиотек возможно из ваших Java-проектов, если вам комфортнее использовать знакомую джаву, чем неизвестный котлин (что, в принципе, понимаемо).
+При подобном использовании могут возникать некоторые заминки и различия (например в том, как называются параметры методов, и как они передаются), но существенных проблем в таком подходе нет.<br>Эта вики создана и редактируется в отдельном репозитории <a data-tooltip-position="top" aria-label="https://github.com/Max-Person/Compprehensive_ITS_wiki" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Max-Person/Compprehensive_ITS_wiki" target="_self">Compprehensive_ITS_wiki</a>, представляющем отдельное <a data-tooltip-position="top" aria-label="https://obsidian.md/" rel="noopener nofollow" class="external-link is-unresolved" href="https://obsidian.md/" target="_self">Obsidian</a>-хранилище Markdown файлов.<br>
+Данные файлы экспортируются в виде html-страниц с помощью плагина <a data-tooltip-position="top" aria-label="https://github.com/KosmosisDire/obsidian-webpage-export" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/KosmosisDire/obsidian-webpage-export" target="_self">Obsidian Webpage Export</a>, и хостятся с помощью <a data-tooltip-position="top" aria-label="https://pages.github.com/" rel="noopener nofollow" class="external-link is-unresolved" href="https://pages.github.com/" target="_self">GitHub Pages</a>.Ранее вы могли видеть более старую версию этой вики в разделе Wiki репозитория its_DomainModel, однако я решил вынести ее как более централизованный справочник после того, как узнал о такой возможности.]]></description><link>index.html</link><guid isPermaLink="false">index.md</guid><pubDate>Mon, 25 Aug 2025 08:29:04 GMT</pubDate></item><item><title><![CDATA[Типы данных]]></title><description><![CDATA[В системе присутствует различный функционал, связанный с различного рода управлением внутренними для модели данными (например, хранение значений <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойств</a> и <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданных</a>, а также вычисление выражений в дереве решений).
+Чтобы система могла четко понимать характер данных, с которыми она работает, в ней реализован механизм типов данных.Типы данных в системе по смыслу и назначению аналогичны типам данных, существующих во всех строго типизированных языках программирования (той же Java).В коде классы, связанные с типизацией данных, расположены в пакете its.model.definition.types.
+Основные классы, представляющие отдельные типы данных, являются наследниками класса Type, и предоставляют следующий функционал:
+метод fits(value) - можно ли привести значение value к данному типу
+метод castFits(subType) - можно ли привести тип subType к данному типу
+метод Type.of(value) - вернуть тип переданного значения.
+В таблице ниже представлен список типов данных, поддерживаемых в системе на данный момент.]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/типы-данных.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Типы данных.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Свойства]]></title><description><![CDATA[Свойства - это некоторые значения, хранящиеся в <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классах</a>/<a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объектах</a>, и описывающие их.
+Набор свойств, имеющийся у конкретной сущности, задается в классах, от которых данная сущность наследуется.Пример использования свойствclass Cat { //свойство "возраст" целочисленного типа, // определенное для объектов класса "кот" obj prop age: int[0, 100] ;
+} obj Basya : Cat { //Конкретное значение свойства "возраст", присущее объекту "Бася" класса "кот" age = 2 ;
+}
+В коде определения свойств представлены классом PropertyDef
+Состав базовой хранимой информации:
+Имя свойства (PropertyDef.name)
+Имя класса, объявившего свойство (PropertyDef.declaringClassName)
+<br><a data-tooltip-position="top" aria-label="Типы значений свойств" data-href="#Типы значений свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Типы_значений_свойств_0" class="internal-link" target="_self" rel="noopener nofollow">Тип</a> значения свойства (PropertyDef.type)
+<br><a data-tooltip-position="top" aria-label="Объектные и классовые свойства" data-href="#Объектные и классовые свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Объектные_и_классовые_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">Вид</a> свойства (PropertyDef.kind)
+<br>Связанные со свойством <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> (PropertyDef.metadata)
+Утверждения о значении свойств представлены классом PropertyValueStatement
+Состав базовой хранимой информации:
+Сущность, которой принадлежит значение - класс/объект (PropertyValueStatement.owner)
+Имя свойства (PropertyValueStatement.propertyName)
+Задаваемое значение свойства (PropertyValueStatement.value)
+В системе есть разграничения между объектными и классовыми свойствами. Как следует из названия, это различие определяет, какой сущности могут принадлежать свойства - классам или объектам.
+Для аналогии можно опять же вспомнить Java - классовые свойства похожи на static поля, т.к. принадлежат классам. Объектные же свойства аналогичны обычным полям, т.к. принадлежат отдельным объектам и разнятся от объекта к объектуСоответственно, значение свойства можно определять только в сущности, соответствующей виду данного свойстваПример использования различных видов свойств//класс "Животное"
+class Animal { //свойство "является разумным" является классовым, // а то есть принадлежит классу и определяется в нем - // поскольку это свойство не может разниться // от одного животного к другому внутри одного класса class prop isSentient : bool = false ; //свойство "возраст" является объектным, // а то есть принадлежит объектам класса и определяется в них - // поскольку это свойство может разниться от одного животного к другому obj prop age: int[0, 100] ;
+} //класс "Человек", наследуется от "Животного"
+class Human : Animal { //В отличие от static-полей в Java, классовые свойства в нашей системе // могут наследоваться и переопределяться в классах наследниках. //Так, "Человек" переопределяет для своих объектов свойство "является разумным" isSentient = true ;
+} //объект "Петя", инстанс класса "Человек"
+obj Petya : Human { //значение объектного свойства определяется в объекте age = 20 ;
+}
+Значения свойств, вне зависимости от их вида и типа, наследуются и могут переопределяться - это можно видеть в примере выше.На практике это значит, что процесс получения значения свойства для текущей сущности происходит по следующему простому принципу:
+Пока значение не найдено: Если текущая сущность определяет значение свойства, вернуть его
+Иначе перейти к родительскому классу текущей сущности (Именно так реализован код в методе ClassInheritorDef.getPropertyValue())Из этого следует, что с помощью наследования в конкретном объекте можно получить значения свойств, определенных в самом этом объекте или в его родительских классах (т.к. они наследуются)
+При этом, конечно, стоит учитывать ограничения, описанные в предыдущем разделе - так, значение объектного свойства можно найти только в самом объекте, а вот значение классового свойства можно быть получено только из его родительских классов.<br>Любое свойство обязано указывать <a data-tooltip-position="top" aria-label="Типы данных" data-href="Типы данных" href="1.-модели-(its_domainmodel)/модель-предметной-области/типы-данных.html" class="internal-link" target="_self" rel="noopener nofollow">тип своего значения</a> (поле PropertyDef.type).
+Свойства могут иметь следующие типы:
+Булево значение, BooleanType
+Целые числа, IntegerType
+Дробные числа, DoubleType
+Строки, StringType
+Перечисления EnumType
+<br>Это обусловлено тем, что только данные типы считаются в системе "примитивными", поскольку они не взаимодействуют с объектной стороной системы (в отличие от типов ClassType и ObjectType) - возможность "запихнуть" в значение свойства объект или класс нарушала бы принципы системы. Для подобного связывания между объектами есть <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношения</a>.TODOКласс, объявляющий свойство (PropertyDef.declaringClassName), должен присутствовать в модели.В случае, если свойство имеет перечислимый тип (enum), то заданное перечисление должно присутствовать в модели.Для утверждения о значении свойства, данное свойство должно присутствовать в модели.Свойство, объявленное в конкретном классе, не может иметь имя, повторяющее имя одного из свойств, уже определенных в классе или его классах-родителях.Значения классовых свойств должны быть определены только в классах, а объектных - в объектах.Тип значения свойства должен соответствовать объявленному типу свойства.В случае, если класс является конкретным (в модели существуют объекты, являющиеся прямыми инстансами этого класса), то в нем должны быть определены значения для всех классовых свойств, указанных в нем и его родительских классах (с учетом наследования их значений).
+Т.е. не допускается ситуация, когда какой-то объект наследуется от класса, но при этом в цепочке наследования для этого объекта не определено какое-то из свойств класса.]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Свойства.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[LOQI]]></title><description><![CDATA[LOQI - это специально созданный для данного проекта текстовый язык записи данных, хранимых <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">моделью предметной области</a>.Note
+Поскольку это кастомный язык, в блоках кода с его описанием будет использоваться подсветка для языка Dart - просто потому что она относительно неплохо подходит.
+Пример записи на LOQI://класс "Питомец"
+class Pet { //"Возраст" - Объектное свойство данного класса obj prop age: int;
+} //класс "Человек"
+class Human { //"Возраст" - Объектное свойство данного класса obj prop age: int; //"Имеет питомца" - отношение между объектами класса "Человек" // и объектами класса "Питомец" rel hasPet(Pet) : {1 -&gt; *} ;
+} //Объект класса "Питомец", представляющий конкретного питомца "Мурзик"
+obj murzik : Pet { //Утверждение о значении свойства "Возраст" данного объекта age = 2;
+} //Объект класса "Человек", представляющий конкретного человека "Алиса"
+obj alice : Human { //Утверждение о значении свойства "Возраст" данного объекта age = 22; //Утверждение о связи данного объекта //с другим объектом "Мурзик" по отношению "имеет питомца" hasPet(murzik);
+}
+LOQI был создан из-за трудности чтения RDF-записей, а также из-за их неспособности описать определения данных (в RDF записываются только утверждения).Note
+Технически, можно было бы придумать, как записывать в RDF все те же данные, что и в LOQI, но это бы требовало большого усложнения и без того трудночитаемых конструкций.
+Тем не менее, подобная необходимость еще может возникнуть, например, чтобы оптимизировать графовые операции над моделью предметной области. LOQI написан на ANTLR4. В коде его грамматику можно посмотреть в файле LoqiGrammar.g4.
+LOQI не имеет значимых пробелов (whitespaces) - это значит, что, в теории, любую модель можно записать в одну (длинную и сложночитаемую) строку
+Файлы LOQI имеют расширение .loqi. (Но, строго говоря, это ни на что не влияет - можете скормить в парсер хоть .txt)
+<br>Т.к. LOQI был создан специально для представления <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">модели предметной области</a> в тексте, то он поддерживает весь функционал, предоставляемый моделью. Поэтому для хранения, обмена, и отладки модели рекомендуется использовать именно LOQI - т.к. он полностью отображает сохраняемую в модели информацию. <br>Единственным (незначительным) исключением из этого правила являются <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> - поскольку в коде в них можно положить произвольные значения (т.е. любые объекты). Запись метаданных в LOQI поддерживает только те типы данных, <a data-tooltip-position="top" aria-label="Свойства > Типы значений свойств" data-href="Свойства#Типы значений свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Типы значений свойств" class="internal-link" target="_self" rel="noopener nofollow">которые могут иметь свойства</a>. Работа с LOQI в коде представлена пакетом its.model.definition.loqi.По сути, LOQI представляет собой только механизм сериализации и десериализации модели DomainModel.Для десериализации (преобразование LOQI текста в объект DomainModel) используйте класс DomainLoqiBuilder, а точнее его статический метод DomainLoqiBuilder.buildDomain(). Данный метод принимает объект Reader, что позволяет считывать данные из произвольных мест - например, из строки в коде, из файла, или из ресурсов приложения.
+Примеры использования://Чтение из строки
+DomainModel modelA = DomainLoqiBuilder.buildDomain(new StringReader(loqiString)); //Чтение из файла
+DomainModel modelB = DomainLoqiBuilder.buildDomain(new FileReader("domain.loqi")); //Чтение из ресурсов приложения
+DomainModel modelC = DomainLoqiBuilder.buildDomain(new InputStreamReader( this.getClass().getClassLoader().getResource("domain.loqi").openStream() ));
+Для сериализации (преобразование объекта DomainModel в LOQI текст) используйте класс DomainLoqiWriter, а точнее его статический метод DomainLoqiWriter.saveDomain().
+Данный метод принимает саму модель DomainModel, а также объект Writer, что позволяет записывать данные в произвольные места: например, в отдельную строку-буфер или в файл.<br>Note
+Данный метод также принимает третий аргумент - набор так называемых опций записи. Они немного изменяют итоговый вид LOQI-текста (подробнее см. в коде), но эти изменения незначительны, и связаны с редко используемым функционалом, который мы рассмотрим <a data-tooltip-position="top" aria-label="Свободные данные" data-href="#Свободные данные" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Свободные_данные_0" class="internal-link" target="_self" rel="noopener nofollow">в конце данной статьи</a>.
+В большинстве случаев третий аргумент стоит оставлять как пустой набор.
+Примеры использования://Запись в строку
+StringWriter stringWriter = new StringWriter(); DomainLoqiWriter.saveDomain(domainModel, stringWriter, Set.of()); String loqiString = stringWriter.toString(); //Запись в файл
+DomainLoqiWriter.saveDomain(domainModel, new FileWriter("domain.loqi"), Set.of());
+Далее в этой статье будут рассмотрены детали записи языка и его спецификация.LOQI поддерживает однострочные (// ...) и многострочные (/* ... */) комментарии, которые не преобразовываются в модель, и нужны просто для человеческого понимания.Все сущности в LOQI имеют некоторое закрепленное за ними имя. Здесь и далее подобные имена будут технически называться идентификаторами.Идентификатор может иметь две формы:
+Простой идентификатор - строка, соответствующая регулярному выражению [a-zA-Z$_][a-zA-Z$_0-9]*. Подобные идентификаторы весьма распространены во многих языках программирования - это строка, содержащая буквы, цифры, а также знаки $ и _, но не начинающаяся с цифры. Имена переменных в Java придерживаются тех же правил.
+Обратите внимание, что простой идентификатор не может пересекаться с ключевым словом LOQI. Например, в LOQI записи не может существовать идентификатор true или идентификатор class. Произвольный или экранированный идентификатор - строка, соответствующая регулярному выражению `\W+` Т.е. это произвольная непустая строка без пробелов, окруженная символами ` (символ backtick, бэктик)
+Экранированные идентификаторы позволяют большую свободу в названиях ваших сущностей, в том числе допускаются пересечения с ключевыми словами - например, может существовать идентификатор `true` или идентификатор `class`.
+Обратите внимание, что при переводе в Java-объекты экранированные идентификаторы "разворачиваются": в коде строка, соответствующая LOQI идентификатору `class`, будет иметь просто значение class . В связи с этим, например, идентификаторы `Name` и Name будут эквивалентны. Note
+Это не жесткое правило синтаксиса LOQI, но разные идентификаторы стоит записывать по разному, для понятности.
+Предлагаемые автором конвенции: <br>Для <a data-tooltip-position="top" aria-label="Классы" data-href="#Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Классы_0" class="internal-link" target="_self" rel="noopener nofollow">классов</a>: PascalCase
+<br>Для <a data-tooltip-position="top" aria-label="Перечисления (Enum)" data-href="#Перечисления (Enum)" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Перечисления_(Enum)_0" class="internal-link" target="_self" rel="noopener nofollow">перечислений</a>: PascalCase
+<br>Для значений <a data-tooltip-position="top" aria-label="Перечисления (Enum)" data-href="#Перечисления (Enum)" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Перечисления_(Enum)_0" class="internal-link" target="_self" rel="noopener nofollow">перечислений</a>: MACRO_CASE
+<br>Для <a data-tooltip-position="top" aria-label="Объекты" data-href="#Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Объекты_0" class="internal-link" target="_self" rel="noopener nofollow">объектов</a>: camelCase
+<br>Для <a data-tooltip-position="top" aria-label="Свойства" data-href="#Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Свойства_0" class="internal-link" target="_self" rel="noopener nofollow">свойств</a> и <a data-tooltip-position="top" aria-label="Отношения" data-href="#Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Отношения_0" class="internal-link" target="_self" rel="noopener nofollow">отношений</a>: camelCase В различных местах языка также может упоминаться список идентификаторов. Чаще всего это подразумевает запись произвольного кол-во идентификаторов, разделенных запятой , (также допускается запятая в конце)&lt;идентификатор1&gt; , &lt;идентификатор2&gt; ... [,]
+Здесь и далее в подобных записях синтаксиса квадратными скобками [] обозначены необязательные участки.Под значениями понимаются конкретные литералы различных типов, используемых в разных местах языка.<br>Запись в LOQI использует значения тех типов, <a data-tooltip-position="top" aria-label="Свойства > Типы значений свойств" data-href="Свойства#Типы значений свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Типы значений свойств" class="internal-link" target="_self" rel="noopener nofollow">которые могут иметь свойства</a>.Строка вида &lt;идентификатор перечисления&gt;:&lt;идентификатор значения&gt;.
+Примеры: State:EVALUATED, Position:LEFT.Последовательность десятичных цифр, не начинающаяся с нуля (за исключением самого числа 0).
+Примеры: 0, 9, 1024.
+Целые числа с суффиксом d или D на конце. Примеры: 0d, 9D, 1024d
+Десятичная дробь, разделенная точкой .. Целая часть может отсутствовать (считается равной нулю). Примеры: 0.0, 0.05, .05, 100.75
+Целые числа или десятичные дроби с экспоненциальной частью вида e&lt;число&gt; или E&lt;число&gt;. Примеры: 1e7, 0.5E10, 5e-2
+true или false
+Однострочный текст, обернутый в кавычки "..." либо одинарные кавычки '...' В строке допускаются эскейп-последовательности \n, \t, \r, \b, \f, \', \" и \\, а также неэкранированные кавычки "противоположного" типа Многострочный текст, обернутый в троекратные кавычки """...""" либо троекратные одинарные кавычки '''...''' В строках допускаются эскейп-последовательности (см. выше), переносы строки, а также неэкранированные кавычки "противоположного" типа <br>Объявление <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданных</a> в LOQI имеет одинаковый для разных сущностей синтаксис, следующего вида:[ &lt;свойство метаданных&gt;*
+]
+Здесь и далее в подобных записях синтаксиса звездочкой `обозначено произвольное количество сооветствующих участков (включая 0).* ***Конкретно в данном случае квадратные скобки[]` не обозначают необязательность, а являются элементом синтаксиса.***&lt;свойство метаданных&gt; имеет форму[&lt;идентификатор кода локализации&gt; . ] &lt;идентификатор свойства метаданных&gt; = &lt;значение&gt; ;
+Таким образом, пример записи метаданных может быть таким:[ index = 0 ; RU.localizedName = "операнд _Char_value на позиции 1" ; EN.localizedName = "variable _Char_value at position 1" ;
+]
+В дальнейших секциях запись метаданных поясняться не будет, поскольку она везде такая, как это написано здесь.<br>Объявление <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">класса</a> в LOQI имеет следующий синтаксис:class &lt;идентификатор класса&gt; [: &lt;идентификатор родительского класса&gt;] [&lt;тело класса&gt;]
+[&lt;метаданные класса&gt;]
+&lt;тело класса&gt; имеет форму{ &lt;данные о классе&gt;* }
+При этом &lt;данные о классе&gt; могут включать в себя:
+<br><a data-tooltip-position="top" aria-label="Объявления отношений" data-href="#Объявления отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Объявления_отношений_0" class="internal-link" target="_self" rel="noopener nofollow">Объявления отношений</a>
+<br><a data-tooltip-position="top" aria-label="Объявления свойств" data-href="#Объявления свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Объявления_свойств_0" class="internal-link" target="_self" rel="noopener nofollow">Объявления свойств</a>
+<br><a data-tooltip-position="top" aria-label="Утверждения о значениях свойств" data-href="#Утверждения о значениях свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Утверждения_о_значениях_свойств_0" class="internal-link" target="_self" rel="noopener nofollow">Утверждения о значениях свойств</a>
+Таким образом, пример записи класса может быть таким:class Operator : Element { //... данные о классе ...
+} [ //... метаданные ...
+]
+Или таким:class Element //и все!
+<br>Объявление <a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объекта</a> в LOQI имеет следующий синтаксис:obj &lt;идентификатор объекта&gt; : &lt;идентификатор класса объекта&gt; [&lt;тело объекта&gt;]
+[&lt;метаданные объекта&gt;]
+&lt;тело объекта&gt; имеет форму{ &lt;данные об объекте&gt;* }
+При этом &lt;данные об объекте&gt; могут включать в себя:
+<br><a data-tooltip-position="top" aria-label="Утверждения о связях по отношениям" data-href="#Утверждения о связях по отношениям" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Утверждения_о_связях_по_отношениям_0" class="internal-link" target="_self" rel="noopener nofollow">Утверждения о связях по отношениям</a>
+<br><a data-tooltip-position="top" aria-label="Утверждения о значениях свойств" data-href="#Утверждения о значениях свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Утверждения_о_значениях_свойств_0" class="internal-link" target="_self" rel="noopener nofollow">Утверждения о значениях свойств</a>
+Таким образом, пример записи объекта может быть таким:obj alice : Human { //... данные об объекте ...
+} [ //... метаданные ...
+]
+Или таким:obj murzik : Pet //и все!
+<br>Объявление <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношения</a> в LOQI имеет следующий синтаксис:rel &lt;идентификатор отношения&gt;(&lt;список идентификаторов классов объектов отношения&gt;) [: &lt;вид отношения&gt;] [&lt;метаданные отношения&gt;] ;
+<br>&lt;вид отношения&gt; указывает на <a data-tooltip-position="top" aria-label="Отношения > Характеристики отношений" data-href="Отношения#Характеристики отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Характеристики отношений" class="internal-link" target="_self" rel="noopener nofollow">соответствующую характеристику</a> данного отношения, и может иметь две формы: &lt;независимый вид отношения&gt; и &lt;зависимый вид отношения&gt;
+В отсутствии указания вида отношения, оно считается независимым, не задающим шкалу, и не имеющим квантификатора. &lt;независимый вид отношения&gt; имеет следующий синтаксис:&lt;тип шкалы отношения&gt;
+ИЛИ
+&lt;квантификатор отношения&gt;
+ИЛИ
+&lt;тип шкалы отношения&gt; &lt;квантификатор отношения&gt;
+Здесь <br>&lt;тип шкалы отношения&gt; это либо linear для обозначения линейной шкалы, либо partial для обозначения частичной шкалы. Подробнее про шкалы <a data-tooltip-position="top" aria-label="Отношения > Шкала" data-href="Отношения#Шкала" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Шкала" class="internal-link" target="_self" rel="noopener nofollow">здесь</a>
+<br>&lt;квантификатор отношения&gt; это строка вида { subjCount -&gt; objCount }, где subjCount и objCount это либо целые числа, либо звездочка *. Подробнее про квантификаторы <a data-tooltip-position="top" aria-label="Отношения > Количественность (Квантификатор)" data-href="Отношения#Количественность (Квантификатор)" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Количественность (Квантификатор)" class="internal-link" target="_self" rel="noopener nofollow">здесь</a>
+&lt;зависимый вид отношения&gt; имеет следующий синтаксис:&lt;тип зависимости&gt; to &lt;ссылка на основное отношение&gt;
+Здесь
+<br>&lt;тип зависимости&gt; это одна из следующих строк, обозначающая соответствующий <a data-tooltip-position="top" aria-label="Отношения > Типы зависимых отношений" data-href="Отношения#Типы зависимых отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Типы зависимых отношений" class="internal-link" target="_self" rel="noopener nofollow">тип зависимости</a> отношения от другого основного отношения: opposite
+transitive
+between
+closer
+further &lt;ссылка на основное отношение&gt; может иметь две формы: Идентификатор отношения, если ссылаемся на отношение в том же классе
+Строка вида &lt;идентификатор класса&gt; -&gt; &lt;идентификатор отношения&gt; , если ссылаемся на отношение в другом классе Примеры различных объявлений отношений://Независимое отношение со шкалой и квантификатором
+rel isDirectlyLeftOf(Token) : linear {1 -&gt; 1} [ //... метаданные ...
+] ; //Независимое отношение со шкалой
+rel isOperandOf(Element) : partial ; //Простое независимое отношение
+rel belongsTo(Element) ; //Зависимое отношение со ссылкой на отношение другого класса
+rel has(Token) : opposite to Token-&gt;belongsTo ; //Независимосе тернарное отношение (2 класса объектов)
+rel isComplexOperandWith(Token, Token,) ;
+Утверждение о связи объектов по отношению имеет следующий синтаксис:&lt;идентификатор отношения&gt;(&lt;список идентификаторов объектов отношения&gt;) ;
+Например://бинарная связь
+belongsTo(element_1); //тернарная связь
+isComplexOperandWith(tokenA, tokenB);
+<br>Объявление <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойства</a> в LOQI имеет следующий синтаксис:&lt;вид свойства&gt; prop &lt;идентификатор свойства&gt; : &lt;тип свойства&gt; [&lt;метаданные свойства&gt;] ;
+<br>&lt;вид свойства&gt; это либо class для обозначения классового свойства, либо obj для обозначения объектного свойства. Подробнее о видах свойств <a data-tooltip-position="top" aria-label="Свойства > Объектные и классовые свойства" data-href="Свойства#Объектные и классовые свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Объектные и классовые свойства" class="internal-link" target="_self" rel="noopener nofollow">здесь</a>&lt;тип свойства&gt; может иметь следующие формы:
+&lt;идентификатор перечисления&gt; - перечислимый тип
+int &lt;диапазон целых чисел&gt; - целочисленный тип &lt;диапазон целых чисел&gt; показывает допустимые значения в данном типе, и имеет одну из следующих форм: строка вида [a, b], показывающая диапазон-промежуток от целого числа a до целого числа b, включительно. При этом как a, так и b могут быть опущены - в таком случае считается, что у промежутка нет верхней и нижней границы соответственно.
+строка вида {a, b, c ... }, показывающая диапазон-множество конкретных допустимых значений, где a, b, c и т.д. - целые числа double &lt;диапазон дробных чисел&gt; - дробночисленный тип &lt;диапазон дробных чисел&gt; - аналогично &lt;диапазон целых чисел&gt; выше, но указываемые значения могут быть как целыми, так и дробными. bool - тип булево значение
+string - строковый тип
+Примеры различных объявлений свойств://объектное свойство перечислимого типа, с метаданными
+obj prop state : State [ //... метаданные ...
+] ; //классовое свойство целочисленного типа с диапазоном-множеством
+class prop countOfTokens : int{1, 2} ; //объектное свойство дробного типа с диапазоном-промежутком obj prop probablity : double[0.0, 1.0] Утверждение о значении свойства в LOQI имеет следующий синтаксис:&lt;идентификатор свойства&gt; = &lt;значение&gt; ;
+Например:countOfTokens = 2; probablity = 0.7; state = State:UNEVALUATED;
+В случае классовых свойств для краткости записи можно также одновременно и объявить свойство, и задать ему значение для текущего класса.
+Подобная запись имеет следующий синтаксис:&lt;вид свойства&gt; prop &lt;идентификатор свойства&gt; [: &lt;тип свойства&gt;] = &lt;значение&gt; [&lt;метаданные своства&gt;] ;
+Например следующая запись:class prop countOfTokens : int{1, 2} = 2;
+Эквивалентна следующим:class prop countOfTokens : int{1, 2} ;
+countOfTokens = 2;
+Также, как видно по синтаксису, тип свойства в данном случае можно опустить - он определяется на основе присваемого значения (но для числовых типов диапазон определяться не будет).Например://свойство имеет тип int, определенный по значению
+class prop countOfTokens = 2;
+<br>Объявление <a data-tooltip-position="top" aria-label="Перечисления (Enum)" data-href="Перечисления (Enum)" href="1.-модели-(its_domainmodel)/модель-предметной-области/перечисления-(enum).html" class="internal-link" target="_self" rel="noopener nofollow">перечисления</a> в LOQI имеет следующий синтаксис:enum &lt;идентификатор перечисления&gt; [&lt;тело перечисления&gt;]
+[&lt;метаданные перечисления&gt;]
+&lt;тело перечисления&gt; имеет следующую форму:{ &lt;список значений перечисления&gt;
+}
+Здесь &lt;список значений перечисления&gt; подразумевает запись произвольного кол-во значений перечисления, разделенных запятой , (также допускается запятая в конце)&lt;значение перечисления 1&gt; , &lt;значение перечисления 2&gt; ... [,]
+&lt;значение перечисления&gt; имеет следующий синтаксис:&lt;идентификатор значения перечисления&gt; [&lt;метаданные значения перечисления&gt;]
+Таким образом, пример записи перечисления может быть таким:enum State { UNEVALUATED [ //... метаданные ... ], EVALUATED [ //... метаданные ... ], USED [ //... метаданные ... ], OMITTED [ //... метаданные ... ], } [ //... метаданные ...
+]
+Или таким:enum State { UNEVALUATED, EVALUATED, USED, OMITTED }
+Или таким:enum State
+(хотя не особо понятно, зачем может пригодиться перечисление без значений)"Свободные" данные - это концепт, который был придуман для возможности хранить метаданные и значения свойств отдельно от их определений - например, метаданные можно было бы выделить в отдельный файл с локализацией, а значения свойств - в теги.<br>С момента их ввода уже появилась <a data-tooltip-position="top" aria-label="Модель предметной области > Составление модели из частей" data-href="Модель предметной области#Составление модели из частей" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html#Составление модели из частей" class="internal-link" target="_self" rel="noopener nofollow">возможность объединять несколько различных моделей</a>, что по сути приводит к тем же возможностям, в связи с чем этот функционал практически не используется.
+(Но справедливости ради, "свободные данные" позволяют разделить информацию даже внутри одного LOQI файла, в то время как объединение моделей этого не позволяет)Тем не менее, данный функционал присутствует в системе, поэтому для полноты он будет описан.Свободные метаданные - это возможность определить метаданные сущности отдельно от ее основного объявления.
+Эта конструкция имеет следующий синтаксис:meta for &lt;ссылка на сущность&gt; &lt;метаданные для сущности&gt;
+Здесь &lt;ссылка на сущность&gt; может иметь следующие формы:
+[obj] &lt;идентификатор объекта&gt; для ссылки на объект
+class &lt;идентификатор класса&gt; для ссылки на класс
+&lt;идентификатор класса&gt;.&lt;идентификатор свойства&gt; для ссылки на свойство
+&lt;идентификатор класса&gt; -&gt; &lt;идентификатор отношения&gt; для ссылки на отношение
+enum &lt;идентификатор перечисления&gt; для ссылки на перечисление
+&lt;идентификатор перечисления&gt;:&lt;идентификатор значения&gt; для ссылки на значение перечисления
+Например:meta for State:EVALUATED [ RU.localizedName = "вычислен" ; EN.localizedName = "evaluated" ;
+]
+Свободные значения свойств классов - это возможность задать значения свойствам класса отдельно от его основного определения.
+Эта конструкция имеет следующий синтаксис:values for class &lt;идентификатор класса&gt; { &lt;утверждения о значении свойства&gt;*
+}
+Например:values for class `operator_&amp;&amp;` { arity = Arity:BINARY ; precedence = 14 ; associativity = Associativity:LEFT ; needsLeftOperand = true ; needsRightOperand = true ; needsInnerOperand = false ; countOfTokens = 1 ;
+}
+]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Представления данных/LOQI.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Перечисления (Enum)]]></title><description><![CDATA[Перечисления - это задаваемые пользователем (автором предметной области) <a data-tooltip-position="top" aria-label="Типы данных" data-href="Типы данных" href="1.-модели-(its_domainmodel)/модель-предметной-области/типы-данных.html" class="internal-link" target="_self" rel="noopener nofollow">типы данных</a>, имеющих конечное (перечислимое) количество именованных значений. Они используются в первую очередь как настраиваемые типы данных для <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойств</a>.Пример перечисления и его использования://Перечисление "Направление"
+enum Direction { //Значения перечисления //Значение "вверх" UP, //Значение "вниз" DOWN, //Значение "влево" LEFT, //Значение "вправо" RIGHT
+} //Класс "Указатель"
+class Pointer { //Свойство "направление указателя", имеющие тип перечисления "Направление" obj prop pointDirection : Direction;
+} //Объект класса "Указатель"
+obj myPointer : Pointer { //Свойство объекта принимает значение "Направление:вверх" pointDirection = Direction:UP ;
+}
+<br>Стоит отметить, что в отличие от, например, Java, перечисления в нашей модели не являются <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классами</a>, а значения перечисления - не являются <a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объектами</a>. Перечисления и их значения это отдельно задаваемый тип данных, не связанный с системой классов/объектов.В коде определения перечислений представлены классом EnumDef
+Состав базовой хранимой информации:
+Имя перечисления (EnumDef.name)
+Значения перечисления (EnumDef.values)
+<br>Связанные с перечислением <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> (EnumDef.metadata)
+Значения перечислений представлены классом EnumValueDef
+Состав базовой хранимой информации:
+Имя перечисления, которому значение принадлежит (EnumValueDef.enumName)
+Имя самого значения (EnumValueDef.name)
+<br>Связанные со значением <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> (EnumValueDef.metadata)
+Да особо ничего :) Они весьма простые, выше в принципе вся необходимая информация.
+За исключением...Перечисления являются единственным типом сущности в системе, для которых задаются так называемые "встроенные значения" - определения, которые всегда есть в любой модели.Вкратце о самом термине: в теории, возможность добавить встроенные значения присутствует для любого типа сущностей (см. DefContainer#addBuiltIn), но реализована она только для перечислений. Встроенные значения не считаются в общем количестве определений, и не выводятся в различных видах записи (например, LOQI), но присутствуют в соответствующих контейнерах, и могут быть получены методом get, по имени.Для перечислений такое значение одно: перечисление под названием Comparison, которое имеет значения Comparison:less, Comparison:greater и Comparison:equal. Как можно понять по названиям, данное перечисление представляет собой результат сравнения двух значений: первое значение может быть меньше/больше/равно второму соответственно.
+Встраивание данного типа нужно, чтобы в любой модели работал оператор сравнения, возвращающий значение данного перечисления.Особых проверок корректности нет. (Кроме очевидного, поддерживаемого на уровне кода: имена значений не должны повторяться внутри одного перечисления).]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/перечисления-(enum).html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Перечисления (Enum).md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Отношения]]></title><description><![CDATA[Отношения - это описание некоторых связей, которыми могут быть связаны <a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объекты</a>.<br>
+Набор отношений, в которых может участвовать конкретный объект, задается в <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классах</a>, от которых данный объект наследуется.В формулировке выше обратите внимание, что классы не могут быть связаны между собой отношениями - классы только задают возможные отношения, которыми могут быть связаны их объекты.Пример использования отношений//класс "Питомец"
+class Pet //класс "Человек"
+class Human { //Отношение "имеет питомца", связывает объекты "Людей" с объектами "Питомцев" rel hasPet(Pet) : {1 -&gt; *} ;
+} //Кот Бася, питомец
+obj basya : Pet //Человек Юля
+obj yulia : Human { //Юля связана с Басей отношением "имеет питомца" hasPet(basya);
+}
+В коде определения отношений представлены классом RelationshipDef
+Состав базовой хранимой информации:
+Имя отношения (RelationshipDef.name)
+Имя класса-субъекта отношения (RelationshipDef.subjectClassName)
+Имена классов-объектов отношения (RelationshipDef.objectClassNames)
+Вид/Характеристика отношения (RelationshipDef.kind)
+Утверждения о конкретной связи объектов по отношению представлены классом RelationshipLinkStatement
+Состав базовой хранимой информации:
+Объект, из которого исходит связь (субъект связи) (RelationshipLinkStatement.owner)
+Имя отношения (RelationshipLinkStatement.relationshipName)
+Имена связанных объектов (объекты связи) (RelationshipLinkStatement.objectNames)
+Note
+Здесь и далее в этой статье для записи определений конкретных отношений, будем использовать запись вида SubjClass -&gt; relationship(ObjClass1, ... ObjClassN), где SubjClass и ObjClass1-N - классы.
+(Классы записываем с большой буквы, и используем -&gt;)
+Определение отношения вида A -&gt; rel(B, C) (где классы A, B и C в общем случае различны) означает, что объекты-инстансы класса А (и только они) могут быть связаны отношением rel с объектами-инстансами классов B и C (и только с ними).
+Эта типизация строга, т.к. нельзя "запихнуть" в отношение объекты классов, не подходящие ему по типу. Однако, наличие в системе наследования означает, что любые наследники данных классов могут быть связаны данным отношением.Отношения представляют собой направленные связи между объектами заданных классов. Это значит, что у связи есть конкретный объект-источник (называемый субъектом) и объекты-"окончания" (называемые, за неимением лучшего термина, объектами связи).Схематично это можно представить так:<br>
+<img alt="relationship_demo.png" src="images/relationship_demo.png" target="_self">Note
+Здесь и далее для записи отдельных утверждений о связях между объектами будем использовать запись subj =&gt; relationship(obj1, ..., objN), где subj, и obj1-N - объекты.
+(Объекты записываем с маленькой буквы, и используем =&gt;)
+На практике направленность отношений выражается в том, что утверждения a =&gt; rel(b) и b =&gt; rel(a) различны.Как можно понять из формулировок выше, в общем случае объектов связи может быть больше одного (сколько угодно), в то время как субъект связи есть только один.
+В связи с этим, часто возникает необходимость разделять отношения по их "арности" - количеству объектов, связанных этих отношением. Соответственно, арность отношения равно кол-ву объектов связи + 1 (субъект связи).
+Наиболее распространены бинарные отношения ("субъект -&gt; объект") и тернарные отношения ("субъект -&gt; два объекта"). N-арными отношениями называем отношения, чья арность превышает 2 (т.е. все, что больше бинарных)<br>
+<img alt="relationship_arity.png" src="images/relationship_arity.png" target="_self">Поскольку для отношения вида A -&gt; rel(B, C) классы B и C в общем случае различны, то становится очевидно, что для соответствующих утверждений становится значимым порядок указания объектов связи: поскольку утверждение a =&gt; rel(b, c) в таком случае валидно, а утверждение a =&gt; rel(c, b) - невалидно, т.к. не соответствует типизации (если предполагать что a, b и c это объекты-инстансы классов A, B и C соответственно). Таким образом, отношения, чьи классы-объекты различны, считаются упорядоченными - в записи утверждений о них важен порядок объектов связи.
+Упорядоченными также считаются отношения некоторых зависимых типов (см. ниже) - например "Ближе к чем" и "Дальше от чем".В противном случае отношение считается считается неупорядоченным (если отношение задано так, что все его объекты имеют один и тот же класс).
+Из этого следует в т.ч. то, что строго говоря бинарные отношения являются неупорядоченными (вырожденный случай), а также то, что зависимые отношения типа "Между" являются неупорядоченными.Warning
+Я считаю, что описанный подход к [не]упорядоченности наверное не очень хорош - поскольку на данный момент нет возможности задать упорядоченное отношение, чьи объекты связи имеют один и тот же тип.
+В будущем, данный механизм стоит переделать так, чтобы упорядоченность считалась поведением по умолчанию для всех отношений, вне зависимости от их типизации, а неупорядоченность нужно было отдельно указывать, и она была бы возможна только для связей, чьи объекты имеют один и тот же тип.
+Отношения, помимо своих основных параметров (имени и классов субъектов/объектов) имеют также дополнительные характеристики, которые могут повлиять на их смысловое значение, а также дополнительно ограничить особенности их применения.
+Все это в коде задается сложным объектом RelationshipDef.kind, имеющим тип RelationshipKind.В основе этих дополнительных характеристик лежит разделение отношений на независимые (BaseRelationshipKind) и зависимые/вычисляемые (DependantRelationshipKind)
+Независимые отношения являются состоянием отношений по-умолчанию. Независимые отношения определяют конкретные связи, которыми связаны конкретные объекты в модели предметной области. Связи именно этих отношений являются "основой" данных об отношениях в модели в принципе.
+Зависимые отношения, в отличие от независимых, не прописываются в модели напрямую, а вычисляются на основе других отношений. Они позволяют производить более сложные суждения о модели на основе существующих в ней связей по независимым отношениям.
+Данное разделение косвенно влияет на многие особенности отношений. Рассмотрим это ниже.
+У любого бинарного отношения, будь оно зависимым или независимым, определяется количественность, называемая также квантификатором (класс LinkQuantifier, вычисляется в поле RelationshipDef.effectiveQuantifier) - это характеристика, определяющая максимальное возможное количество субъектов и объектов данной связи.Если говорить по-простому, то это характеристика "один-ко-многим", "многие-ко-многим" и т.п., знакомая нам из проектирования БД и подобного, только выраженная в количественном формате:
+Поле LinkQuantifier.subjCount указывает на то, сколько субъектов связи может существовать для одного заданного объекта связи.
+Поле LinkQuantifier.objCount указывает на то, сколько объектов связи может существовать для одного заданного субъекта связи.
+Так, если записать квантификатор в формате {subjCount -&gt; objCount}, то квантификатор {2 -&gt; 1} некоторого отношения A -&gt; rel(B) значит, что объекты класса А могут иметь только одну связь с объектом класса B, но с одним таким объектом класса B могут быть связаны 2 объекта класса А.
+Пример использования квантификаторов (и нарушения ограничения, поставленного ими)//класс "Питомец"
+class Pet //класс "Человек"
+class Human { //Отношение "имеет питомца", связывает объекты "Людей" с объектами "Питомцев" //Имеет квантификатор "один-ко-многим" (здесь * означает неограниченность). //Т.е. у питомца может быть только один владелец, //но у владельца может быть неограниченное кол-во питомцев. rel hasPet(Pet) : {1 -&gt; *} ;
+} //Кот Бася, питомец
+obj basya : Pet
+//плюшевая альпака, питомец
+obj alpaca : Pet //Человек Юля
+obj yulia : Human { //Юля связана с Басей отношением "имеет питомца" hasPet(basya); //Юля также связана этим отношением c альпакой //- это не нарушает квантификатора, т.к. objCount отношения не ограничен hasPet(alpaca);
+} //Человек Марат
+obj marat : Human { //Данное утверждение о связи Марата с Басей отношением "имеет питомца" //нарушает квантификатор, поскольку subjCount данного отношения равен 1 hasPet(basya);
+}
+Important
+Явно задавать квантификаторы можно только для независимых отношений (поле BaseRelationshipKind.quantifier).
+При этом, делать это не обязательно, т.к. при неуказании квантификатора отношение считается имеющим квантификатор по умолчанию: <br>Для отношений без <a data-tooltip-position="top" aria-label="Шкала" data-href="#Шкала" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Шкала_0" class="internal-link" target="_self" rel="noopener nofollow">шкалы</a> - {* -&gt; *}, т.е. "Многие ко многим", что по сути значит отсутствие количественных ограничений
+Для отношений со шкалой - в соответствии со смыслом шкалы (см. ниже) Квантификаторы зависимых отношений вычисляются на основе квантификаторов отношений, от которых они зависят.
+Независимые бинарные отношения могут задавать т.н. шкалу. Это опциональная характеристика, которая задает дополнительные ограничения на структуры, образованные объектами, связанными данным отношением.
+На данный момент в системе поддерживается два вида шкал - линейная и частичная.Если отношение задает линейную шкалу, это значит, что все объекты, объединенные данным отношением, можно выстроить в линию, где каждый следующий объект указывает связью на предыдущий объект:<br>
+<img alt="relationship_linear_scale.png" src="images/relationship_linear_scale.png" target="_self">
+Пример использования отношения, задающего линейную шкалу://Слово в тексте
+class Word { obj prop text : string ; //Отношение "Идет после предыдущего слова" задает линейную шкалу rel isAfter(Word) : Linear ;
+} obj word1 : Word { text = "Мама" ;
+} obj word2 : Word { text = "мыла" ; isAfter(word1) ;
+} obj word3 : Word { text = "раму" ; isAfter(word2) ;
+}
+Из данного определения вытекает, что класс-субъект и класс-объект данного отношения одинаковы - поскольку каждый объект в цепочке выступает как в качестве субъекта, так и в качестве объекта.
+Также, исходя из данного определения, квантификатор отношения, задающего линейную шкалу, всегда равен "один-к-одному" ({ 1 -&gt; 1 }), т.к. единственный следующий объект может только ссылаться на единственный предыдущий, и наоборот.Если отношение задает частичную шкалу, это значит, что все объекты, объединенные данным отношением, можно выстроить в древовидную структуру, где каждый объект указывает связью на объект-родитель:<br>
+<img alt="relationship_partial_scale.png" src="images/relationship_partial_scale.png" target="_self">
+Пример использования отношения, задающего частичную шкалу://человек
+class Person { //Отношение "Является ребенком" задает частичную шкалу rel isChildOf(Person) : Partial ;
+} obj mom : Person obj alice : Person { isChildOf(mom) ;
+} obj bob : Person { isChildOf(mom) ;
+}
+По логике, аналогичной линейной шкале, класс-субъект отношения в частичной шкале так же равен классу-объекту.
+Квантификатор отношения, задающего частичную шкалу, не фиксирован полностью, но должен иметь значение objCount = 1 (т.е. { ... -&gt; 1 }), поскольку у субъекта-ребенка может быть только один объект-родитель. Квантификатором по умолчанию для него является { * -&gt; 1 }Warning
+На данный момент отношения, задающие шкалы, проверяются на соответствие своим квантификаторам, что в принципе позволяет судить об их структуре, но есть нюанс - на данный момент не проверяется "глобальность" структур, образуемых данными отношениями.
+Т.е., по хорошему, линия или дерево, образуемые такими объектами, должны быть единственны во всей модели, и все объекты данного типа должны принадлежать одной структуре. Однако на данный момент система этого не проверяет - данное ограничение пока что остается на совести пользователя.
+Предоставляемая шкалами информация о том, какую структуру образовывают связанные отношением объекты, используется, в первую очередь, для возможности вычисления различных зависимых отношений на основе задаваемых независимых отношений, задающих шкалы. Об этом - в следующем разделе.Как было сказано выше, зависимые отношения по факту не существуют в данных модели (в модели не может быть соответствующего утверждения RelationshipLinkStatement), а вычисляются на основе других отношений.В таблице ниже представлены поддерживаемые типы зависимых отношений, требования для их объявления, и их смысл.
+Данные типы в коде задаются полем DependantRelationshipKind.type, имеющим тип DependantRelationshipKind.Type - это енам. В таблице, для краткости, связанные енам-константы будут писаться просто в виде Type.&lt;VALUE&gt;.
+В данной таблице используются следующие обозначения:
+Зависимое отношение &lt;type&gt;Rel - конкретное отношение, рассматриваемое в строке таблицы (вместо &lt;type&gt; для понятности подставляется описание типа зависимости)
+Отношение-основа baseRel - отношение, от которого зависит depRel. Обратите внимание, что baseRel может быть как независимым, так и зависимым от какого-то другого отношения.
+Корневое отношение rootRel - последнее независимое отношение в цепочке зависимостей, начинающейся с depRel. Если baseRel независимое, то оно же и есть rootRel.
+TODOImportant
+Скорее всего, проекция не понадобится вам в работе с этим проектом. Это весьма странная и редко используемая фича, поэтому этот раздел вы скорее всего можете пропустить.
+Тем не менее, для полноты информации фича описана.
+Проекцией, в контексте отношений, называется возможность подстановки объектов одного класса в утверждения о связи отношением для объектов другого класса.
+Проще всего это объяснить на примере. Рассмотрим следующую модель предметной области://Класс "Игрушка"
+class Toy { //отношение "имеет часть" rel hasPart(ToyPart) : {1 -&gt; * };
+} //Класс "Часть игрушки"
+class ToyPart { //отношение "сделано из материала" rel isMadeOf(Material) : {* -&gt; 1};
+} //Материал, из которого сделаны части игрушки
+class Material //Кукла, игрушка
+obj doll : Toy { //Имеет часть - голову hasPart(dollHead); //Имеет часть - тело hasPart(dollBody);
+} //Голова куклы
+obj dollHead : ToyPart { //Сделана из пластика isMadeOf(plastic);
+} //Тело куклы
+obj dollBody : ToyPart { //Сделано из пластика isMadeOf(plastic);
+} obj plastic : Material
+В подобной модели, в обычной ситуации, мы можем делать утверждение только об материале отдельных частей куклы. Но что, если мы хотим узнать, сделана ли сама кукла из пластика?
+В теории, это можно проверить сложным образом, используя квантор общности (For All ...). Но подобная проверка весьма сложна в записи и понимании. В идеале, мы бы хотели проверить простое утверждение, записанное, например, так: doll =&gt; isMadeOf(plastic).
+Такое утверждение формально невалидно, но именно для этого существует проекция.Проекция класса A на класс A' возможна, когда в модели существует единственное отношение projRel (т.н. отношение проекции), удовлетворяющее следующим критериям:
+Оно имеет типизацию A -&gt; projRel(A')
+Оно имеет квантификатор, чей subjCount = 1 (т.е. {1 -&gt; ...})
+Если проекция класса A на класс A' возможна, то это значит, что объекты класса A могут использоваться в вычислимых утверждениях о связях по отношениям, в типизации которых указан класс A'.
+Для этого, каждому объекту a класса A ставится в соответствие множество объектов a'1 - a'N класса A', соединенных с ним отношением projRel. Утверждение о связи для объекта a верно, если оно верно для всех соответствующих объектов a'1 - a'N.Так, в приведенном примере, класс Toy может быть спроектирован на класс ToyPart, поскольку существует отношение проекции hasPart.
+Таким образом, объекту doll ставятся в соответствие объекты dollHead и dollBody, и утверждение doll =&gt; isMadeOf(plastic) "раскрывается" в dollHead =&gt; isMadeOf(plastic) И dollBody =&gt; isMadeOf(plastic).В общем случае, проекцией могут быть подставлены нескольку участников связи - в этом случае происходит комбинаторный перебор всех конфигураций соответствующих объектов.
+Например, допустим есть некоторое отношение X -&gt; rel(Y, Z), и при этом существуют проекции A в Х, B в Y и C в Z.
+В этой ситуации, допустим мы хотим проверить утверждение a =&gt; rel(b, c), где a проецируется в x1 и x2, b проецируется в y1 и y2, и c проецируется в z1 и z2
+В таком случае, будут рассмотрены все конфигурации спроецированного утверждения:
+x1 =&gt; rel(y1, z1)
+x1 =&gt; rel(y1, z2)
+x1 =&gt; rel(y2, z1)
+x1 =&gt; rel(y2, z2)
+x2 =&gt; rel(y1, z1)
+x2 =&gt; rel(y1, z2)
+x2 =&gt; rel(y2, z1)
+x2 =&gt; rel(y2, z2)
+И только если каждое из них выполняется, то выполняется исходное утверждение a =&gt; rel(b, c).Important
+Утверждения, возможные с помощью проекции, являются вычислимыми так же, как утверждения о зависимых отношениях. Это значит, что соответствующих утверждений (RelationshipLinkStatement) не может быть в самих данных.
+Класс-субъект отношения (RelationshipDef.subjectClassName) должен присутствовать в модели.Классы-объекты отношения (RelationshipDef.objectClassNames) должны присутствовать в модели.Для утверждения о связи объектов отношением, данное отношение должно присутствовать в модели.Для утверждения о связи объектов отношением, все объекты должны присутствовать в модели.Отношение, объявленное в конкретном классе, не может иметь имя, повторяющее имя одного из отношений, уже определенных в классе или его классах-родителях.Квантификатор могут задавать только бинарные независимые отношения.Шкалу могут задавать только бинарные независимые отношения.Если квантификатор задается отношением, которое задает шкалу, квантификатор должен соответствовать требованиям к данной шкале "один-к-одному" для линейной шкалы
+"...-к-одному" для частичной шкалы
+В цепочке зависимости отношений не может быть рекурсии (отношение не может зависеть от самого себя).<br>Зависимые отношения должны удовлетворять <a data-tooltip-position="top" aria-label="Типы зависимых отношений" data-href="#Типы зависимых отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Типы_зависимых_отношений_0" class="internal-link" target="_self" rel="noopener nofollow">требованиям</a> по типу зависимости.Утверждения о связи объектов отношением должны удовлетворять типизации отношения (по кол-ву объектов в связи и по их типу).Не может быть явно заданных утверждений о зависимых отношениях.Количество связей по отношениям у объектов должно удовлетворять квантификаторам этих отношений.]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Отношения.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate><enclosure url="images/relationship_demo.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;images/relationship_demo.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Объекты]]></title><description><![CDATA[Объекты представляют собой конкретные сущности, присутствующие в задаче/предметной области. Тогда как <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классы</a> определяют, что может быть в предметной области, конкретное множество и состояние объектов определяет конкретную ситуацию, возникшую в предметной области.<br>
+Так, основной смысл объектов состоит в том, что значения их <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойств</a> и связи их между собой по <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношениям</a> создают описание некоторой конкретной ситуации.Пример использования объектов://класс "Питомец"
+class Pet { obj prop age: int;
+} //класс "Человек"
+class Human { obj prop age: int; rel hasPet(Pet) : {1 -&gt; *} ;
+} //Объект класса "Питомец", представляющий конкретного питомца "Мурзик"
+obj murzik : Pet { age = 2;
+} //Объект класса "Человек", представляющий конкретного человека "Алиса"
+obj alice : Human { //конкретные утверждения о значениях свойств и связях между объектами // описывают ситуацию age = 22; hasPet(murzik);
+}
+В коде классы представлены классом ObjectDef.
+Состав базовой хранимой информации:
+Имя объекта (ObjectDef.name)
+<br>Имя класса, <a data-tooltip-position="top" aria-label="Объекты являются экземплярами класса" data-href="#Объекты являются экземплярами класса" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html#Объекты_являются_экземплярами_класса_0" class="internal-link" target="_self" rel="noopener nofollow">инстансом</a> которого является данный объект (ObjectDef.className)
+<br>Определенные для объекта <a data-tooltip-position="top" aria-label="Свойства > Объектные и классовые свойства" data-href="Свойства#Объектные и классовые свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Объектные и классовые свойства" class="internal-link" target="_self" rel="noopener nofollow">значения свойств</a> (ObjectDef.definedPropertyValues)
+Утверждения о связях объекта с другими объектами по отношениям (ObjectDef.relationshipLinks)
+<br>Связанные с объектом <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> (ObjectDef.metadata)
+Любой задаваемый в модели объект должен указывать некоторый класс, инстансом (экземпляром) которого он является (поля ObjectDef.className и ObjectDef.clazz). Такой класс может быть только один - множественное наследование в системе не поддерживается.
+Объект, являющийся инстансом класса, считаются инстансом любого из его родительских классов.От своего класса (а также его родительских классов) объект получает все определенные в них значения классовых свойств, а также получает возможность (и необходимость) иметь значения по всем определенных в них объектных свойствах и быть связанным с другими объектами связями по определенным в них отношениях.
+Подробнее см.:
+<br><a data-href="Классы#Наследование" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html#Наследование" class="internal-link" target="_self" rel="noopener nofollow">Классы &gt; Наследование</a>
+<br><a data-href="Свойства#Объектные и классовые свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Объектные и классовые свойства" class="internal-link" target="_self" rel="noopener nofollow">Свойства &gt; Объектные и классовые свойства</a>
+<br><a data-href="Свойства#Получение значений свойств" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Получение значений свойств" class="internal-link" target="_self" rel="noopener nofollow">Свойства &gt; Получение значений свойств</a>
+<br><a data-href="Отношения#Типизация отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Типизация отношений" class="internal-link" target="_self" rel="noopener nofollow">Отношения &gt; Типизация отношений</a>
+Корректность объекта состоит из:
+<br><a data-tooltip-position="top" aria-label="Свойства > Корректность данных (валидация)" data-href="Свойства#Корректность данных (валидация)" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Корректность_данных_(валидация)_0" class="internal-link" target="_self" rel="noopener nofollow">Корректности всех значений его свойств</a>;
+<br><a data-tooltip-position="top" aria-label="Отношения > Корректность данных (валидация)" data-href="Отношения#Корректность данных (валидация)" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Корректность_данных_(валидация)_0" class="internal-link" target="_self" rel="noopener nofollow">Корректности всех его связей по отношениям</a>;
+А также собственной корректности объекта, описанной ниже.
+Класс, экземпляром которого является объект, должен присутствовать в модели.]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Объекты.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Модель предметной области]]></title><description><![CDATA[В данном разделе описывается представление данных, составляющих описание предметной области (домена), и конкретной задачи в них.
+Данный раздел соответствует пакету its.model.definition в кодеОписание предметной области во многом похоже на описание предметной области в любом ООП-языке: для задач выделяются отдельные типы сущностей, которые могут в них присутствовать - <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классы</a>. Классы определяют возможное состояние <a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объектов</a>, относящихся к данному классу - их <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойства</a>, а также какие <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношения</a> могут существовать между ними.
+Объединение всех этих данных представляется классом DomainModel.Подробнее об отдельных элементах модели домена (выделенных выше ссылками) можно прочитать в отдельных страницах данного разделаПоскольку данная библиотека определяет свои собственные классы для представления данных, с которыми она работает, то в теории она независима от конкретных форматов записи этих данных: при желании, любой, использующий библиотеку, может написать собственный считыватель/преобразователь данных, который бы создавал и заполнял конкретный объект DomainModel (для этого рекомендуется использовать методы класса DomainBuilderUtils).Тем не менее, библиотека предоставляет два способа чтения/записи данных "из коробки":
+<br><a data-href="LOQI" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html" class="internal-link" target="_self" rel="noopener nofollow">LOQI</a> - собственный специальный язык текстовой записи данных, максимально приближенный к представлению данных в коде. Он создан, чтобы легко вручную читать и писать эти данные.
+<br><a data-href="Словари + RDF" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/словари-+-rdf.html" class="internal-link" target="_self" rel="noopener nofollow">Словари + RDF</a> - формат записи, более приближенный к представлению данных в визуальном редакторе. Здесь, объявления классов/свойств/отношений представляются в табличном виде (т.н. словари, представленные csv файлами), а конкретные утверждения об объектах/значениях/связях записываются в формате RDF.
+Note
+Здесь и далее в этом разделе для демонстрации данных будет использоваться запись LOQI.
+Поскольку это кастомный язык, в блоках кода с его описанием будет использоваться подсветка для языка Dart - просто потому что она относительно неплохо подходит.
+Это выглядит так://Класс с именем "Element"
+class Element { //Свойство класса, с именем "countOfTokens" и типом int в диапазоне 1-2 class prop countOfTokens: int[1,2] ; //Свойство объектов класса, с именем state и типом State (это enum) obj prop state: State ; //Отношение, которую могут иметь объекты класса с именем "has", // связывает объекты данного класса с объектами типа Token как "один-ко-многим" rel has(Token) : {1 -&gt; *} ;
+} [ //произвольные локализованные метаданные RU.localizedName = "элемент" ; EN.localizedName = "element" ;
+]
+<br>Подробнее о самом языке можно почитать в <a data-tooltip-position="top" aria-label="LOQI" data-href="LOQI" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html" class="internal-link" target="_self" rel="noopener nofollow">соответствующей статье</a>.В коде вы можете не раз наткнуться на классы-наследники классов DomainDef и DomainRef. Стоит понимать разницу между ними:
+DomainDef (от слова Definition - определение) представляет конкретное определение в модели данных (например, объект или класс) и содержит полную информацию о немDomainRef (от слова Reference - ссылка) представляет только ссылку на соответствующее определение, и содержит только минимально необходимую информацию для того, чтобы найти соответствующее определение в модели домена (для этого класс предоставляет методы findIn и findInOrUnknown).Объявления и Утверждения это понятия, применяемые в основном к свойствам и отношениям в модели домена.
+Объявления в данном контексте являются информацией о наличии какого-то понятия (свойства/отношения) в модели. Так, например, класс может объявить наличие у него какого-то свойства. Объявления в коде представлены наличием соответствующих DomainDef.
+Утверждения же говорят о некоторых конкретных данных относительно данного понятия - например, значение конкретного свойства у конкретного объекта. Утверждения в коде представлены классами-контейнерами Statements, и их содержимым.Пример:class Element { //Объявление свойства объектов obj prop state: State ; //Объявление отношения между объектами rel has(Token) : {1 -&gt; *} ;
+} obj operator_1 : Element { //Утверждение о значении свойства для конкретного объекта state = State:used ; //Утверждение о связи конкретных объектов по отношению has(token_1) ;
+}
+В типичных случаях использования модели для описания условия конкретной задачи, модель создается из нескольких частей (от общего к частному):
+Общая модель предметной области (то, что будет использоваться в деревьях решений)
+Модель с данными для конкретной под-области (т.н. теги)
+Модель с данными для конкретной задачи (чаще всего объекты подключаются именно здесь)
+С учетом такой необходимости, класс DomainModel позволяет свободное объединение и разделение нескольких отдельных моделей:
+DomainModel.add(other: DomainModel) - добавить данные из переданной модели в текущую. В случае наличия дублирований/переопределений в двух моделях, будет выброшена ошибка.
+Т.е. в этом случае определения с одним именем в объединяемых моделях считаются различными, и не могут сосуществовать.
+DomainModel.addMerge(other: DomainModel) - добавить данные из переданной модели в текущую. В отличие от метода add(), переопределения будут объединены, если это возможно.
+Т.е. в этом случае определения с одним именем в объединяемых моделях считаются одним и тем же определением, чья информация "сливается" воедино, если только в ней нет противоречий. Возможность данного объединения проверяется методом DomainDef.mergeEquals();
+Сама логика объединения описана методом DomainDef.addMerge() DomainModel.subtract(other: DomainModel) - "вычесть" данные переданной модели из текущей. Данная операция обратна операции addMerge
+Пример объединения моделей:modelAclass MyClass { obj prop intProperty: int ;
+} obj obj_1 : MyClass { intProperty = 100;
+} obj obj_A : MyClass { intProperty = 100;
+}
+modelBclass MyClass { obj prop boolProp: bool ;
+} obj obj_1 : MyClass { boolProp = true;
+} obj obj_B : MyClass { boolProp = true;
+}
+modelA, в результате выполнения modelA.addMerge(modelB)class MyClass { obj prop intProperty: int ; obj prop boolProp: bool ;
+} obj obj_1 : MyClass { intProperty = 100; boolProp = true;
+} obj obj_A : MyClass { intProperty = 100;
+} obj obj_B : MyClass { boolProp = true;
+}
+После выполнения modelA.subtract(modelB) модель вернется в исходное состояние.Корректность данных в модели выражается в двух составляющих
+Полнота данных - полная известность всех упомянутых в модели сущностей
+Валидность данных - соответствие известных данных наложенным смысловым ограничениям.
+Понимание разницы между этими составляющими важно: неполная модель не может быть использована как источник данных, но она все еще может быть дополнена данными и стать корректной моделью; модель с невалидными данными уже не соответствует требованиям корректности, и никогда не сможет им соответствовать (если только не изменить существующие данные).
+Так, например, в большинстве случаев, модель, построенная из данных о конкретной задаче (см. п.3 в секции выше), будет валидной, но не полной, поскольку в ней отсутствует информация об общей части предметной области - эта информация затем может быть добавлена использованием методов add или addMerge, и модель станет полностью корректна.
+Пример неполной модели://Неизвестен класс MyClass
+obj obj_1 : MyClass { //Неизвестно, что за свойство "property", и какой тип оно имеет property = 100;
+}
+Пример невалидной модели:class MyClass { obj prop property: bool ;
+} obj obj_1 : MyClass { //Свойство известно, но значение не соответствует заявленному типу property = 100;
+}
+В коде, корректность данных проверяется следующими методами:
+DomainElement.validateAndGet() - проверить валидность модели и получить все найденные ошибки (описания невалидных/неполных данных)
+DomainElement.validateAndThrowInvalid() - проверить модель и выкинуть ошибки, только если есть невалидные данные (неполные данные этим методом игнорируются)
+DomainElement.validateAndThrow() - проверить модель и выкинуть ошибки, только если есть любые некорректные данные (неполные или невалидные)
+При наполнении модели, данные проверяются на валидность, когда это возможно. В случае прямого добавления в модель невалидных данных, будет выброшена ошибка. Такой выброс ошибки обусловлен политикой fail fast - чем скорее разработчик увидит ошибку, тем лучше.
+Однако невалидность в данных не всегда можно обнаружить сразу (в случаях, когда она зависит от большого количества связанных элементов).
+Неполнота модели же в принципе не может быть обнаружена автоматически в процессе ее наполнения - только разработчик решает, когда модель должна быть закончена, корректна, и готова к использованию.
+В связи с этим перед использовании модели обязательно нужно вызвать методы валидации из описанных выше (в большинстве случаев подходит наиболее строгий validateAndThrow, но это стоит решать по ситуации)]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Модель предметной области.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Метаданные]]></title><description><![CDATA[Метаданные - это набор произвольных данных, которые можно привязать к определениям в модели предметной области. Метаданные не считаются основной частью модели, и не взаимодействуют с основным функционалом системы. Они нужны в первую очередь для работы с элементами модели предметной области в стороннем коде, которому требуется хранить и использовать некоторые дополнительные данные, не связанные напрямую с данными модели.
+Одним из главных подобных использований является хранение текстовой информации об элементах модели на естественном языке. С учетом частого возникновения подобной необходимости, метаданные поддерживают локализацию.Пример использования метаданных://Предположим, что мы хотим хранить с помощью модели // представление какого-то графа, состоящего из узлов и связей.
+//Тогда, для его графического отображения, нам могут понадобиться доп. данные: //Класс "Узел"
+class GraphNode { //Отношение "Имеет связь с с другим узлом" rel isLinkedTo(GraphNode) ;
+} //Первый узел
+obj node_1 : GraphNode { isLinkedTo(node_2);
+} [ //Метаданные, привязанные к объекту: color = "#0000FF"; //Цвет узла, как строка size = 20; //Визуальный размер узла, как число RU.text = "Первый узел";	//Локализованные метаданные - текст на русском EN.text = "First node"; //Локализованные метаданные - текст на английском
+] //Второй узел
+obj node_2 : GraphNode [ //Аналогично color = "#00FF00"; id = 25; RU.text = "Второй узел"; EN.text = "Second node";
+]
+В коде метаданные представлены классом MetaData. Подробнее о нем и его структуре в разделе ниже.Привязать метаданные можно к любому объекту, реализующему интерфейс MetaOwner.
+Такими являются:
+Большинство определений в модели предметной области <a data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">Классы</a> (ClassDef)
+<br><a data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">Объекты</a> (ObjectDef)
+<br><a data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">Свойства</a> (PropertyDef)
+<br><a data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">Отношения</a> (RelationshipDef)
+<br><a data-tooltip-position="top" aria-label="Перечисления (Enum)" data-href="Перечисления (Enum)" href="1.-модели-(its_domainmodel)/модель-предметной-области/перечисления-(enum).html" class="internal-link" target="_self" rel="noopener nofollow">Перечисления</a> (EnumDef)
+<br>Значения <a data-tooltip-position="top" aria-label="Перечисления (Enum)" data-href="Перечисления (Enum)" href="1.-модели-(its_domainmodel)/модель-предметной-области/перечисления-(enum).html" class="internal-link" target="_self" rel="noopener nofollow">перечислений</a> (EnumValueDef) Большинство элементов дерева решений (Узлы и некоторые вспомогательные сущности)
+В простом случае метаданные представляют собой простую мапу "ключ-значение", где ключ это некоторая строка название свойства метаданных, а значение может быть произвольного типа (при использовании в коде в метаданные можно положить любые значения).
+Положить и получить данные в таких случаях можно соответственно методами MetaData.add(name: String, value: Any) и MetaData.get(name: String) .Однако, с учетом необходимости локализации некоторых значений, ключом по факту является пара строк:
+Код локализации - в типичном использовании строка типа "RU" или "EN", представляющая используемую локализацию. Может быть равен null для нелокализованных метаданных.
+Название свойства метаданных. Не может быть равно null
+В данном случае используются методы MetaData.add(locCode: String?, name: String, value: Any) и MetaData.get(locCode: String?, name: String) соответственно.Хранится все это в "двухярусной" мапе:private val propertyNamesToLocalizations = mutableMapOf&lt;String, MutableMap&lt;String?, Any&gt;&gt;()
+Здесь ключом к внешней мапе является как раз название свойства, а к внутренней - код локализации. Таким образом, разные локализации одного и того же свойства хранятся "рядом", в одной внутренней мапе - их все можно получить методом MetaData.getLocalizations(). ]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Метаданные.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Классы]]></title><description><![CDATA[Классы представляют собой категории/типы сущностей (<a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объектов</a>), которые могут присутствовать в предметной области. Классы определяют, какие <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойства</a> присущи их объектам, а также какими <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношениями</a> они могут связаны.Пример класса://Класс с именем "Element"
+class Element { //Свойство класса, с именем "countOfTokens" и типом int в диапазоне 1-2 class prop countOfTokens: int[1,2] ; //Свойство объектов класса, с именем state и типом State (это enum) obj prop state: State ; //Отношение, которую могут иметь объекты класса с именем "has", // связывает объекты данного класса с объектами типа Token как "один-ко-многим" rel has(Token) : {1 -&gt; *} ;
+} В коде классы представлены классом ClassDef.
+Состав базовой хранимой информации:
+Имя класса (ClassDef.name)
+<br>Имя <a data-tooltip-position="top" aria-label="Наследование" data-href="#Наследование" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html#Наследование_0" class="internal-link" target="_self" rel="noopener nofollow">родительского</a> класса (ClassDef.parentName)
+Определяемый данным классом набор свойств (ClassDef.declaredProperties)
+<br>Определенные для класса <a data-tooltip-position="top" aria-label="Свойства > Объектные и классовые свойства" data-href="Свойства#Объектные и классовые свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Объектные и классовые свойства" class="internal-link" target="_self" rel="noopener nofollow">значения свойств</a> (ClassDef.definedPropertyValues)
+Определяемый данным классом набор отношений (ClassDef.declaredRelationships)
+<br>Связанные с классом <a data-tooltip-position="top" aria-label="Метаданные" data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">метаданные</a> (ClassDef.metadata)
+Подобно классам в ООП языках, классы в нашей модели домена могут указывать родительский класс, от которого они наследуются (поля ClassDef.parentClassName и ClassDef.parentClass). Такой класс может быть только один - множественное наследование в системе не поддерживается.//Родительский класс Animal, имеет свойство age
+class Animal { obj prop age: int[0, 100] ;
+} //Дочерний класс Pet, наследуется от Animal
+//имеет свойство родительского класса, а также добавляет свое свойство и отношения
+class Pet : Animal { obj prop name: string ; rel hasOwner(Human) {* -&gt; 1} ;
+}
+В случае наследования, дочерний класс получает все свойства и отношения, определенные в его родителе (и родителях родителя).В общем, стандартная модель наследования ООП классов, знакомая из, например, Java (за исключением правил наследования классовых свойств)Корректность класса состоит из:
+<br><a data-tooltip-position="top" aria-label="Свойства > Корректность данных (валидация)" data-href="Свойства#Корректность данных (валидация)" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html#Корректность_данных_(валидация)_0" class="internal-link" target="_self" rel="noopener nofollow">Корректности всех объявлений и значений свойств</a>;
+<br><a data-tooltip-position="top" aria-label="Отношения > Корректность данных (валидация)" data-href="Отношения#Корректность данных (валидация)" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Корректность_данных_(валидация)_0" class="internal-link" target="_self" rel="noopener nofollow">Корректности всех объявлений отношений</a>;
+А также собственной корректности класса, описанной ниже.
+В случае указания родительского класса, он должен присутствовать в модели.В цепочке наследования класса не должно быть рекурсии (т.е. класс не может быть дочерним/родительским для самого себя).]]></description><link>1.-модели-(its_domainmodel)/модель-предметной-области/классы.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Модель предметной области/Классы.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item><item><title><![CDATA[Узлы]]></title><description><![CDATA[Узлы в <a data-tooltip-position="top" aria-label="Дерево (граф) решений" data-href="Дерево (граф) решений" href="1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html" class="internal-link" target="_self" rel="noopener nofollow">дереве решений</a> обозначают отдельные шаги в задаваемом деревом алгоритме.
+В коде узлы представлены классами пакета its.model.nodes.<br>Узлы могут содержать <a data-tooltip-position="top" aria-label="Выражения" data-href="Выражения" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html" class="internal-link" target="_self" rel="noopener nofollow">выражения</a> для обозначения более низкоуровневой логики взаимодействия с данными.
+В аналогии с обычными языками программирования узлы соответствуют statement-ам, а выражения - expression-ам. Если не углубляться в отдельные узлы дерева решений, в нем можно выделить отдельные ветви мысли. Сами по себе ветви представляют некоторую логически завершенную часть полного алгоритма, и отвечают на какой-то конкретный вопрос.
+В аналогии с обычными языками программирования ветви мысли соответствуют отдельным функциям/процедурам.В коде ветви мысли представлены классом ThoughtBranch, и имеют ссылку на узел, представляющий их начало - ThoughtBranch.start.Аналогично любой функции, ветвь мысли должна выдавать результат - ответ на соответствующий ей вопрос. В этом смысле все дерево является одной большой ветвью мысли (которое зачастую разделяется на более мелкие) - поскольку выдает ответ на основной вопрос задачи.
+По результату своего выполнения, ветви мысли могут иметь следующие результаты, представленные в коде перечислением BranchResult
+Правильно/верно/true (BranchResult.CORRECT) - с точки зрения данной ветви все выполнено правильно, ответ на вопрос ветви "Да".
+Неправильно/ошибка/false (BranchResult.ERROR) - с точки зрения данной ветви была допущена ошибка, ответ на вопрос ветви "Нет".
+Неизвестно/невозможно определить корректность/null (BranchResult.NULL) - данная ветвь не смогла выдать определенный ответ; либо ситуация слишком неожиданная, либо ветвь решает "передать управление" далее по дереву.
+Выдаваемый ветвью результат определяется в последнем узле, в который пришло его выполнение. В коде классы узлов, которые могут так выдавать результаты, реализовывают интерфейс EndingNode - это либо узлы результатов, либо узлы агрегации.Узлы результатов представляют собой основной способ завершить ветвь мысли и вернуть из нее какой-то результат.<br>
+<img alt="nodes_BranchResultNode.png" src="images/nodes_branchresultnode.png" target="_self">
+В коде они представлены классом BranchResultNode, и содержат следующую информацию:
+BranchResultNode.value - результат, возвращаемый узлом.
+BranchResultNode.actionExpr (может отсутствовать) - выражение, задающее действие, которое необходимо выполнить по достижении этого узла.
+Поведение при прорешивании:
+Если оно есть, то выполняется выражение BranchResultNode.actionExpr
+Текущая ветвь мысли считается завершенной с результатом BranchResultNode.value.
+Валидация:
+Выражение BranchResultNode.actionExpr должно быть валидным, и соответствовать известной в дереве на данный момент информации.
+Основное множество узлов, имеющих собственную внутреннюю логику, называются "связующими", поскольку предполагают переход к другим узлам (а то есть связь с ними).
+В коде такие узлы наследуются от класса LinkNode.Основной отличительной чертой таких узлов является набор переходов, представленный в коде полем LinkNode.outcomes. Данное поле имеет тип Outcomes, и по сути представляет собой соответствие ключа перехода и узла, к которому должен быть совершен переход. Данное соответствие представлено коллекцией единичных переходов (объектов класса Outcome), каждый из которых хранит соответствующие ключ Outcome.key и узел Outcome.node.
+В процессе прорешивания из узла совершается тот переход, чей ключ соответствует ответу узла (тип этого ответа и ключей переходов зависит от конкретной специфики узла).Стоит отметить, что каждый отдельный переход Outcome в контейнере Outcomes наследуется от класса DecisionTreeElement, а значит может иметь метаданные. Это бывает полезно, поскольку бывают случаи привязки метаданных не к узлу в общем, а к конкретному переходу из него.Большинство узлов в типичном дереве решений является узлами вопросов. Данные узлы представляют собой необходимость выполнить некоторые рассуждения над ситуацией (задаться некоторым вопросом), и в зависимости от результата этих рассуждений (ответа на вопрос) совершить переход к различным следующим узлам.<br><img alt="nodes_QuestionNode.png" src="images/nodes_questionnode.png" target="_self">
+Обычный узел вопроса представлен классом QuestionNode, и содержит следующую информацию:
+QuestionNode.expr - выражение, представляющее рассуждения (вопрос) в этом узле
+QuestionNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является результат выражения QuestionNode.expr.
+QuestionNode.trivialityExpr (может отсутствовать и в большинстве случаев отсутствует) - предикат тривиальности: булево выражение, возвращающее true, если узел должен считаться тривиальным. Тривиальные узлы считаются очевидными, и на них не должно заостряться внимание пользователя. При прорешивании тривиальность напрямую не используется, а является вспомогательной информацией для сторонних проектов.
+QuestionNode.isSwitch (может отсутствовать и в большинстве случаев отсутствует) - флаг, означающий, что узел это тривиальная развилка ("switch"). Аналогично QuestionNode.trivialityExpr, но константа.
+Поведение при прорешивании:
+Вычисляется выражение QuestionNode.expr
+Среди переходов QuestionNode.outcomes находится тот, чей ключ соответствует результату вычисления выражения Если такого нет, то выкидывается ошибка Решение переходит к узлу, соответствующему найденному переходу.
+Валидация:
+Вложенные выражения должны быть валидными, и соответствовать известной в дереве на данный момент информации.
+Типы ключей всех переходов QuestionNode.outcomes должны соответствовать типу возвращаемого значения выражения QuestionNode.expr
+Тип возвращаемого значения выражения QuestionNode.trivialityExpr должен быть булевым значением.
+<br><img alt="nodes_TupleQuestionNode.png" src="images/nodes_tuplequestionnode.png" target="_self">
+Узел вопроса с кортежем или вопроса с несколькими частями отличается от обычного тем, что совершает несколько проверок одновременно, и совершает переход в зависимости от комбинаций ответов на них.Узел вопроса с кортежем представлен классом TupleQuestionNode, и содержит следующую информацию:
+TupleQuestionNode.parts - список отдельных частей данного вопроса. Каждая такая часть представлена классом TupleQuestionPart и содержит следующую информацию: TupleQuestionPart.expr - выражение, представляющее рассуждения (вопрос) в этой части узла
+TupleQuestionPart.possibleOutcomes - вспомогательный список ожидаемых результатов вычисления выражения TupleQuestionPart.expr. При прорешивании напрямую не используются, а являются вспомогательной информацией для сторонних проектов. TupleQuestionNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является объект ValueTuple - кортеж значений, составляемый из результатов вычислений выражений TupleQuestionPart.expr всех частей TupleQuestionNode.parts данного узла.
+Поведение при прорешивании:
+Для всех частей TupleQuestionNode.parts вычисляется их выражение TupleQuestionPart.expr
+Из полученных результатов составляется кортеж ValueTuple
+Среди переходов TupleQuestionPart.outcomes находится тот, чей ключ (кортеж) соответствует полученному на предыдущем шаге кортежу результатов Если такого нет, то выкидывается ошибка Решение переходит к узлу, соответствующему найденному переходу.
+Валидация:
+В узле должно быть как минимум две части TupleQuestionNode.parts (иначе нужно использовать QuestionNode)
+Для каждой части TupleQuestionNode.parts: Вложенные выражения должны быть валидными, и соответствовать известной в дереве на данный момент информации.
+Типы ожидаемых результатов TupleQuestionPart.possibleOutcomes должны соответствовать типу возвращаемого значения выражения TupleQuestionPart.expr Ключи всех переходов TupleQuestionPart.outcomes должны быть кортежами ValueTuple, а также количество и типы значений в этих кортежах должны соответствовать количеству и типу выражений в частях узла.
+Узлы действий представляют собой некоторую манипуляцию с данными о задаче - необходимо либо изменить ситуацию, либо получить и запомнить некоторую информацию.<br><img alt="nodes_FindActionNode.png" src="images/nodes_findactionnode.png" target="_self">
+Узел действия поиска по своей сути аналогичен оператору присвоения в обычном языке программирования - он получает (находит) некоторый объект, и запоминает его как некоторую переменную дерева мысли.
+Данная переменная впоследствии доступна из всех выражений в узлах этой ветви мысли (но не за пределами этой ветви мысли).Узел действия поиска представлен классом FindActionNode, и содержит следующую информацию:
+FindActionNode.varAssignment - основное объявление/присвоение переменной. Имеет тип DecisionTreeVarAssignment, содержащий следующую информацию: DecisionTreeVarAssignment.variable - информация о переменной. Содержит тип (TypedVariable.className) и имя (TypedVariable.varName) переменной.
+DecisionTreeVarAssignment.valueExpr - выражение для вычисления значения переменной. Должно вернуть объект. FindActionNode.errorCategories - вспомогательный список категорий ошибок. При прорешивании напрямую не используются, а являются вспомогательной информацией для сторонних проектов. Каждая категория ошибок имеет тип FindErrorCategory, и содержит следующую информацию: FindErrorCategory.priority - приоритет данной категории ошибок. Eсли объект соответствует нескольким категориям, то будет выбрана категория с наивысшим приоритетом (1 считается наивысшим приоритетом, и далее 2, 3.. по убыванию)
+FindErrorCategory.selectorExpr - выражение предикат поиска: булево выражение, которое должно вернуть true, если объект соответствует данной категории ошибки. Проверяемый объект в данном выражении представлен контекстной переменной с именем "checked". FindActionNode.secondaryAssignments - т.н. "вторичные" объявления/присвоения переменных. Представляют собой список присвоений DecisionTreeVarAssignment (данный класс уже был описан выше). Данные присвоения выполняются только в случае, если основное FindActionNode.varAssignment было успешно выполнено. Также, во вторичных присвоениях также можно ссылаться на основную переменную узла. Таким образом, вторичные присвоения можно использовать, если в одном узле необходимо объявить сразу несколько связанных переменных. При этом предполагается, что внимание студента заостряется только на основном присвоении. FindActionNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является булево значение - true, если основное присвоение успешно выполнено (объект найден), false в противном случае. Переход с ключом false может отсутствовать, если предполагается, что объект всегда будет найден; переход с ключом true должен быть обязательно. Поведение при прорешивании:
+Для основного присвоения FindActionNode.varAssignment вычисляется выражение DecisionTreeVarAssignment.valueExpr
+Если значение основного присвоения не было найдено, то решение переходит к узлу, соответствующему переходу с ключом false
+Если значение основного присвоения было найдено, то данный объект-значение запоминается в переменную дерева, соответствующую описанию переменной DecisionTreeVarAssignment.variable в основном присвоении FindActionNode.varAssignment
+Аналогично основному присвоению выполняются все вторичные присвоения FindActionNode.secondaryAssignments: вычисляются объекты-значения, запоминаются переменные Если на данном этапе какое-либо из вторичных присвоений не удается (объект-значение не найден), то выкидывается ошибка - предполагается, что такая ситуация невозможна. Решение переходит к узлу, соответствующему переходу с ключом true. Здесь и далее в этой ветви мысли переменные, объявленные в узле поиска, доступны в виде переменных дерева. Валидация:
+Вложенные выражения должны быть валидными и соответствовать известной в дереве на данный момент информации.
+Выражения в присвоениях FindActionNode.varAssignment и FindActionNode.secondaryAssignments должны иметь возвращаемый тип Объект, соответствующий классу, заявленному для соответствующей переменной.
+Тип возвращаемого значения выражений в FindActionNode.errorCategories должен быть булевым значением Ключи всех переходов FindActionNode.outcomes должны быть булевыми значениями; переход с ключом true должен быть обязательно. Note
+На данный момент действие поиска - единственный узел действий в системе, поскольку до сих пор не возникало необходимости выполнять какие-то еще другие действия в "середине" решения.
+Однако весьма вероятно, что в какой-то момент также понадобится узел выполнения произвольных выражений над операцией. На данный момент такие действия возможны только в рамках узлов результатов BranchResultNode - но они, закономерно, могут выполняться только в конце конкретной ветви мысли.
+Аналогично же функциям, более высокоуровневые ветви мысли могут "вызывать" более низкоуровневые. Это происходит в случаях, если для определения ответа на вопрос высокоуровневой ветви нужны некие отдельные ответы на более низкоуровневые вопросы.На данный момент в проекте выделено 4 вида агрегации (5, если считать последовательность). В коде эти виды представлены перечислением AggregationMethod. Рассмотрим их:Независимые проверки по логическому И, SIM:AND
+SIM от слова SIMultaneous, одновременно<br>
+<img alt="nodes_sim_and.png" src="images/nodes_sim_and.png" target="_self">
+Применяется, когда необходимо сделать несколько проверок независимо друг от друга и отобразить их результат. При этом любая ошибка во вложенных ветвях приводит к ошибке в основной ветви.
+Результат для основной ветви вычисляется так:
+null, если все ветви такие
+true, если все ветви либо true либо null
+false иначе
+При этом, из узла агрегации по SIM:AND всегда должен быть переход по true результату, т.к. в этом случае решение продолжается.
+Независимые проверки по логическому ИЛИ, SIM:OR<br>
+<img alt="nodes_sim_or.png" src="images/nodes_sim_or.png" target="_self">
+Применяется, когда необходимо сделать несколько проверок независимо друг от друга и отобразить их результат. При этом, если хотя бы одна из вложенных ветвей выполнена корректно, то и основная ветвь считается выполненной корректно.
+Результат для основной ветви вычисляется так:
+null, если все ветви такие
+true, если хотя бы одна ветвь true
+false иначе
+При этом, из узла агрегации по SIM:OR всегда должны быть переходы по false и null результатам, т.к. эти случаи возникают только при рассмотрении всех ветвей вместе, поэтому рассматривать данные результаты нужно на верхнем уровне.
+Взаимоисключающие проверки, MUTEX
+MUTEX от слов MUTually EXclusive, взаимно исключающий<br>
+<img alt="nodes_mutex.png" src="images/nodes_mutex.png" target="_self">
+Применяется, когда необходимо сделать несколько проверок независимо друг от друга и отобразить результат одной из них - предполагается, что в любой ситуации только одна из данных проверок даст какой-либо определенный результат (true либо false), а все остальные выдадут неопределенность (null).
+Результат для основной ветви вычисляется так:
+Если среди ветвей есть результат true или false, то берется он
+null иначе
+Обязательных переходов из узла агрегации по MUTEX нет, но чаще всего из него реализуется переход по null - "Если не выполнилось ничего из перечисленного то переходить сюда".
+Гипотезы, HYP
+HYP от слова HYPothesis, гипотеза<br>
+<img alt="nodes_hyp.png" src="images/nodes_hyp.png" target="_self">
+Применяется, когда системе необходимо делать предположения (гипотезы) о том, как мог бы рассуждать обучаемый, чтобы прийти к своему ответу, потому что сам ответ не дает однозначной информации для этого.
+Результат для основной ветви вычисляется так:
+true, если хотя бы одна ветвь true
+false, если хотя бы одна ветвь false
+null иначе
+При этом, из узла агрегации по HYP всегда должны быть переходы по null результату, т.к. этот случай может возникнуть только при рассмотрении всех ветвей вместе, поэтому рассматривать его нужно на верхнем уровне.
+Последовательность, SEQ
+SEQ от слова SEQuence, последовательность<br>
+<img alt="nodes_seq.png" src="images/nodes_seq.png" target="_self">
+Последовательность является особым видом агрегации, который на первый взгляд может даже не казаться агрегацией. Он применяется, когда необходимо последовательно выполнить несколько проверок и вернуть первый определенный (true или false) результат.
+Учитывая эту формулировку, технически можно сказать, что большинство узлов в дереве объединяются агрегацией SEQ, поскольку идут последовательно друг за другом, и выполнение завершается на первом встреченном результате.
+<br>В то же время, агрегацию SEQ по ветвям нельзя реализовать аналогично остальным типам агрегации, поскольку он требует задания некоторого порядка, в котором проверяются ветви. Подробнее об этом см. <a data-tooltip-position="top" aria-label="Узел последовательной агрегации, WhileCycleNode" data-href="#Узел последовательной агрегации, WhileCycleNode" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html#Узел_последовательной_агрегации,_WhileCycleNode_0" class="internal-link" target="_self" rel="noopener nofollow">WhileCycleNode</a>. В связи с этим, SEQ отсутствует в перечислении AggregationMethod.
+Результат для основной ветви вычисляется так: Берется результат первой из ветвей, чей результат не null (true или false); последующие ветви не выполняются.
+Если все ветви выдали null, то null
+При этом, из узла агрегации по SEQ всегда должны быть переходы по null результату, т.к. именно в нем необходимо определить действия, выполняемые после завершения последовательности.
+<br><img alt="nodes_BranchAggregationNode.png" src="images/nodes_branchaggregationnode.png" target="_self"><br>
+Узел агрегации по ветвям предполагает агрегацию нескольких различных (непохожих друг на друга) проверок, представленных несколькими отдельными ветвями мысли. Это одна из двух основных форм агрегации, вторая - <a data-tooltip-position="top" aria-label="Узел агрегации в цикле по объектам, CycleAggregationNode" data-href="#Узел агрегации в цикле по объектам, CycleAggregationNode" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html#Узел_агрегации_в_цикле_по_объектам,_CycleAggregationNode_0" class="internal-link" target="_self" rel="noopener nofollow">CycleAggregationNode</a>В коде данный узел представлен классом BranchAggregationNode и содержит следующую информацию:
+BranchAggregationNode.aggregationMethod - метод агрегации результатов ветвей в данном узле.
+BranchAggregationNode.thoughtBranches - список агрегируемых ветвей мысли.
+BranchAggregationNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является результат агрегации вложенных ветвей BranchResult.
+Поведение при прорешивании:
+Выполняются все вложенные ветви мысли BranchAggregationNode.thoughtBranches, их результаты запоминаются
+На основе метода агрегации BranchAggregationNode.aggregationMethod в данном узле, а также результатов вложенных ветвей, вычисляется результат BranchResult данного узла.
+Если у данного узла есть переход с ключом, соответствующим полученному результату, то решение переходит к узлу, соответствующему данному переходу. Иначе текущая ветвь мысли считается завершенной с результатом, соответствующим полученному.
+Валидация:
+Список агрегируемых ветвей BranchAggregationNode.thoughtBranches не должен быть пустым.
+Переходы из узла должны содержать переходы с обязательными ключами, соответствующими виду агрегации. <br><img alt="nodes_CycleAggregationNode.png" src="images/nodes_cycleaggregationnode.png" target="_self"><br>
+Узел агрегации в цикле по объектам предполагает агрегацию нескольких однотипных проверок, применяющихся к нескольким объектам в задаче. Это вторая из двух основных форм агрегации, первая - <a data-tooltip-position="top" aria-label="Узел агрегации по ветвям, BranchAggregationNode" data-href="#Узел агрегации по ветвям, BranchAggregationNode" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html#Узел_агрегации_по_ветвям,_BranchAggregationNode_0" class="internal-link" target="_self" rel="noopener nofollow">BranchAggregationNode</a>.В коде данный узел представлен классом CycleAggregationNode и содержит следующую информацию:
+CycleAggregationNode.aggregationMethod - метод агрегации результатов ветвей в данном узле.
+CycleAggregationNode.thoughtBranch - ветвь мысли, представляющая тело цикла.
+CycleAggregationNode.variable - переменная перебора цикла. Данная переменная доступна как переменная дерева в теле цикла (но не вне его).
+CycleAggregationNode.selectorExpr - выражение предикат поиска: булево выражение, которое должно вернуть true для всех объектов, которые должны перебираться в цикле; проверяемый объект подставляется в предикат как контекстная переменная с именем и типом соответствующими переменной CycleAggregationNode.variable
+<br>CycleAggregationNode.errorCategories - вспомогательный список категорий ошибок. При прорешивании напрямую не используются, а являются вспомогательной информацией для сторонних проектов. Каждая категория ошибок имеет тип FindErrorCategory, который был подробно описан в <a data-tooltip-position="top" aria-label="Действие поиска (найти объект и запомнить), FindActionNode" data-href="#Действие поиска (найти объект и запомнить), FindActionNode" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html#Действие_поиска_(найти_объект_и_запомнить),_FindActionNode_0" class="internal-link" target="_self" rel="noopener nofollow">разделе о FindActionNode</a>
+CycleAggregationNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является результат агрегации вложенных ветвей BranchResult.
+Поведение при прорешивании:
+Перебираются объекты типа, объявленного для переменной цикла CycleAggregationNode.variable. Из них оставляются те, для которых предикат поиска CycleAggregationNode.selectorExpr выдает true Для каждого найденного объекта выполняется тело цикла CycleAggregationNode.thoughtBranch, результаты каждой итерации запоминаются. В теле цикла соответствующий объект доступен как переменная дерева с именем и типом, соответствующим переменной цикла CycleAggregationNode.variable.
+На основе метода агрегации CycleAggregationNode.aggregationMethod в данном узле, а также результатов итераций для объектов, вычисляется результат BranchResult данного узла.
+Если у данного узла есть переход с ключом, соответствующим полученному результату, то решение переходит к узлу, соответствующему данному переходу. Иначе текущая ветвь мысли считается завершенной с результатом, соответствующим полученному.
+Валидация:
+Вложенные выражения должны быть валидными и соответствовать известной в дереве на данный момент информации.
+Тип возвращаемого значения выражения предиката поиска CycleAggregationNode.selectorExpr, а также выражений в CycleAggregationNode.errorCategories должен быть булевым значением Переходы из узла должны содержать переходы с обязательными ключами, соответствующими виду агрегации. <br><img alt="nodes_WhileCycleNode.png" src="images/nodes_whilecyclenode.png" target="_self">
+Узел последовательной агрегации по сути аналогичен обычному циклу "while" в языках программирования. Поскольку агрегацию по SEQ невозможно выполнить в узлах агрегации по ветвям или по объектам, она вынесена в данный узел.<br>
+Данный узел во многом похож на цикл по объектам, но выполняет свое тело, пока выполняется некоторое условие, или пока не найден определенный (true или false) результат. Предполагается, что результат условия будет меняться из-за <a data-tooltip-position="top" aria-label="Узлы результатов, BranchResultNode" data-href="#Узлы результатов, BranchResultNode" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html#Узлы_результатов,_BranchResultNode_0" class="internal-link" target="_self" rel="noopener nofollow">доп. действий в неопределенных узлах-результатах</a> внутри тела цикла.В коде данный узел представлен классом WhileCycleNode, и содержит следующую информацию:
+WhileCycleNode.conditionExpr - выражение условия: булево выражение, которое должно выдавать true, если цикл должен продолжаться. WhileCycleNode.thoughtBranch - ветвь мысли, представляющая тело цикла.
+WhileCycleNode.outcomes (наследуется от LinkNode) - переходы к следующим узлам; ключом перехода является результат агрегации вложенных ветвей BranchResult.
+Поведение при прорешивании:
+Пока выполяется условие цикла WhileCycleNode.conditionExpr, выполняется тело цикла WhileCycleNode.thoughtBranch.
+Если очередная итерация завершилась с результатом true или false, то этот результат считается итоговым, и цикл завершается. Иначе если WhileCycleNode.conditionExpr не выполняется (выдает false), то цикл считается завершенным с результатом null.
+Если у данного узла есть переход с ключом, соответствующим полученному результату, то решение переходит к узлу, соответствующему данному переходу. Иначе текущая ветвь мысли считается завершенной с результатом, соответствующим полученному.
+Валидация:
+Вложенные выражения должны быть валидными и соответствовать известной в дереве на данный момент информации.
+Тип возвращаемого значения выражения условия цикла WhileCycleNode.conditionExpr должен быть булевым значением.
+Переходы из узла должен содержать переход с ключом null. ]]></description><link>1.-модели-(its_domainmodel)/дерево-решений/узлы.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Дерево решений/Узлы.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate><enclosure url="images/nodes_branchresultnode.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;images/nodes_branchresultnode.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Дерево (граф) решений]]></title><description><![CDATA[В данном разделе описывается модель алгоритмов вычислений, выполняемых над <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">моделью предметной области</a>, представляемая в виде дерева (графа) решений.
+Данный раздел соответствует пакетам its.model.nodes и its.model.expressions в коде.Note
+По-хорошему, фреймворк, представленный its_* проектами, должен работать с направленным ациклическим графом (Directed Acyclic Graph, DAG) решений, а не деревом - т.е. на один и тот же узел должны мочь ссылаться несколько узлов.<br>
+Так было не всегда - данная модель долгое время была просто деревом, поэтому название устоялось. Более того, даже сейчас в коде its_* проектов данная структура представлена именно деревом, без прямой поддержки DAG-структуры. Имитация DAG-структуры достигается путем дублирования узлов, имеющих несколько родительских узлов, во время экспорта из <a data-tooltip-position="top" aria-label="https://github.com/Strupervlg/decision-tree-interface" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Strupervlg/decision-tree-interface" target="_self"><strong></strong></a>графического редактора - т.е., DAG преобразовывается в дерево.
+Именно поэтому здесь и далее в этом разделе данная структура будет называется деревом.
+Прежде всего, необходимо понимать, что дерево решений представляет собой запись некого алгоритма. Понять данную модель можно примерно как обычное представление алгоритма в виде блок-схемы: каждый узел дерева представляет один шаг алгоритма, а переходы между узлами - возможные переходы между данными шагами.Проще всего, наверное, рассмотреть на примере:<br>
+<img alt="decision_tree_sample.png" src="images/decision_tree_sample.png" target="_self">
+Здесь изображен весьма простой и несерьезный пример дерева решений, представляющего алгоритм проверки, выбран ли хороший питомец (для своеобразного определения "хорошего питомца").<br>Note
+Визуальное представление деревьев решений чаще всего реализуется с помощью графического редактора <a data-tooltip-position="top" aria-label="https://app.diagrams.net/" rel="noopener nofollow" class="external-link is-unresolved" href="https://app.diagrams.net/" target="_self"><strong></strong> (он же <strong></strong>)</a>draw.iodiagrams.net - либо просто в условном схематическом виде (т.е. просто как рисунок), либо с использованием <a data-tooltip-position="top" aria-label="https://github.com/Strupervlg/decision-tree-interface" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/Strupervlg/decision-tree-interface" target="_self"><strong></strong></a>дополнительного расширения (называемого далее просто "редактор"), позволяющего задавать дереву необходимые для его формального представления в коде данные, и впоследствии их экспортировать для использования в коде.
+В данной вики стандарты визуального представления объясняться не будут, но будут использованы для удобства.
+Проще говоря: про визуальное редактирование - не ко мне.
+Так, дерево решений принимает некоторые входные данные (в примере - Питомец Х, и Пользователь U, обозначены прямоугольником в самом верху дерева), с которыми затем производятся различные действия и проверки, для того, чтобы получить некий результат (в примере - узнать, был ли выбран хороший питомец).
+В этом смысле дерево решений, опять таки, является просто алгоритмом или функцией - принимает данные, выполняет операции, и выдает результат.<br>Данные, которыми оперирует дерево решений, определяются соответствующей моделью предметной области. Подробнее об этом - <a data-tooltip-position="top" aria-label="Связь с моделью предметной области" data-href="#Связь с моделью предметной области" href="1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html#Связь_с_моделью_предметной_области_0" class="internal-link" target="_self" rel="noopener nofollow">ниже</a>.Каждый шаг (конкретная операция с данными) в данном алгоритме представлен конкретным узлом дерева; в зависимости от типа необходимых операций могут использоваться различные типы узлов (в примере используются только узлы-вопросы, обозначенные овалами).<br>
+Подробнее про виды узлов дерева читайте в <a data-tooltip-position="top" aria-label="Узлы" data-href="Узлы" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html" class="internal-link" target="_self" rel="noopener nofollow">соответствующей статье</a>.Конкретные операции с данными, выполняемые в узлах, записываются в них особым формальным языком выражений. В зависимости от типа узла, данные выражения могут играть различную роль - описывать формально выполняемые проверки, определять отдельные категории объектов и прочее.<br>
+Подробнее про виды выражений читайте в <a data-tooltip-position="top" aria-label="Выражения" data-href="Выражения" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html" class="internal-link" target="_self" rel="noopener nofollow">соответствующей статье</a>.Переходы между узлами совершаются в зависимости от результата выполнения операции в узле. Конкретный способ определения перехода зависит от используемого типа узла.В итоге прорешивания дерева (последовательного прохождения по его узлам и их выполнения) процесс завершается в одном из узлов-результатов, обозначенных на рисунке небольшими красными и зелеными прямоугольниками. Данные узлы, по сути, представляют собой ответ на вопрос, которым занимается дерево: "Выбран ли хороший питомец?" - "Да, верно, выбран." или "Нет, неверно, не выбран."В коде деревья представлены классом DecisionTree.
+Состав хранимой в нем информации:
+Набор базовых входных переменных (DecisionTree.variables)
+Набор вторичных входных переменных, вычисляемых на основе базовых (DecisionTree.implicitVariables)
+Ветвь мысли, соответствующая основному "телу" дерева мысли (т.е. его основная часть, ответственная за вычисления) (DecisionTree.thoughtBranch)
+Отдельные элементы дерева решений представлены наследниками класса DecisionTreeElement.
+Состав базовой хранимой в нем информации:
+Дерево решений, которому элемент принадлежит (DecisionTreeElement.decisionTree)
+Родительский элемент (DecisionTreeElement.parent)
+<br><a data-href="Метаданные" href="1.-модели-(its_domainmodel)/модель-предметной-области/метаданные.html" class="internal-link" target="_self" rel="noopener nofollow">Метаданные</a> данного элемента (DecisionTreeElement.metadata).
+Алгоритмы, представляемые деревьями решений, можно разделить на два больших вида:А. Алгоритмы, призванные найти (построить или выбрать) конкретный ответ на поставленную задачу. Например, "Какой тип значения возвращает данный вызов функции?". В этом случае дерево должно вернуть конкретный, подходящий к ситуации, ответ.
+Такие деревья назвываются решающими (или "зелеными", т.к. их узлы-результаты имеют только корректные ответы, визуально отмечаемые зеленым цветом).Б. Алгоритмы, призванные проверить ответ, уже данный на поставленную задачу. Например, "Возвращает ли данный вызов функции указанный тип Т?". В этом случае дерево должно вернуть результат данной проверки - правилен ли ответ, или нет.
+Такие деревья называются проверяющими (или "красно-зелеными", т.к. в этом случае узлы-результаты обозначают как верные, так и неверные ответы, и могут обозначаться зеленым или красным цветом соответственно).Данные виды деревьев отражают, в общем, два разных подхода к построению обучающих систем - model-tracing (буквально "прослеживание модели") для решающих деревьев, и constraint-based ("основанный на ограничениях") для проверяющих деревьев.
+Их использование, соответственно, обусловлено различными необходимостями - так, например, решающие деревья хороши, когда необходимо научить студента самому решать конкретную задачу, а проверяющие - когда необходимо показать ему, какие законы (ограничения) предметной области нарушил его неправильный ответ, и научить самому проверять ответ.По названным выше примерам задач также легко видеть, что решающие деревья, чей набор ответов конечен, могут быть преобразованы в перебор ответов и их проверку по проверяющим деревьям.Warning
+На данный момент код проекта поддерживает работу только с проверяющими деревьями - до сих пор на практике деревья использовались только в рамках индивидуальных тренажеров для студентов, при проверке их ответов на представленные вопросы. Поэтому в решающих деревьях просто не было необходимости.
+В связи с этим здесь и далее речь ведется только о проверяющих деревьях.
+Тем не менее, существенных различий в этих видах деревьев нет - за исключением выдаваемых ими результатов. <br>Для того, чтобы определить возможность тех или иных действий в дереве, оно должно быть связано с <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">моделью предметной области</a> - необходимо определить, какими <a data-tooltip-position="top" aria-label="Классы" data-href="Классы" href="1.-модели-(its_domainmodel)/модель-предметной-области/классы.html" class="internal-link" target="_self" rel="noopener nofollow">классами</a> объектов дерево оперирует, а следовательно и какие их <a data-tooltip-position="top" aria-label="Свойства" data-href="Свойства" href="1.-модели-(its_domainmodel)/модель-предметной-области/свойства.html" class="internal-link" target="_self" rel="noopener nofollow">свойства</a> и <a data-tooltip-position="top" aria-label="Отношения" data-href="Отношения" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html" class="internal-link" target="_self" rel="noopener nofollow">отношения</a> ему "известны".Таким образом, дерево решений никогда не существует "в вакууме", а привязано к конкретной модели предметной области.Для этого в коде существует класс DomainSolvingModel - он объединяет в себе следующие данные:
+Модель предметной области (домена), общее для всех ситуаций применения (DomainSolvingModel.domainModel) Части предметной области, специфичные для отдельных ситуаций применения (т.н. теги) (DomainSolvingModel.tagsData) Деревья решений, описывающие решение задач данной в предметной области (DomainSolvingModel.decisionTrees)<br>
+Подробнее о различных частях модели предметной области см. в "<a data-tooltip-position="top" aria-label="Модель предметной области > Составление модели из частей" data-href="Модель предметной области#Составление модели из частей" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html#Составление модели из частей" class="internal-link" target="_self" rel="noopener nofollow">Составление модели из частей</a>"
+<br>Стоит отметить, что при хранении данной модели речь идет только о статической (постоянной) части предметной области - т.е., <a data-tooltip-position="top" aria-label="Объекты" data-href="Объекты" href="1.-модели-(its_domainmodel)/модель-предметной-области/объекты.html" class="internal-link" target="_self" rel="noopener nofollow">объекты</a> в данных моделях почти всегда отсутствуют, поскольку отражают "динамическую" часть предметной области, отличающейся для каждой конкретной задачи. Корректность записи дерева решений выражается в двух составляющих
+Валидность конструкций - удовлетворение конструкциями собственных смысловых ограничений (например, использование булевских выражений в условных конструкциях и т.п.)
+Соответствие конструкций модели предметной области - не нарушение смысловых ограничений, наложенных спецификой предметной области (например, использование только существующих свойств или отношений, и т.п.)
+Здесь, в отличие от модели предметной области, данное различие нужно только для удобства понимания корректности данных.
+Сама валидация дерева вызывается методом DecisionTreeElement.validate (для выбрасывания исключений) или DecisionTreeElement.validateAndGet (для получения всего списка ошибок).
+Соответственно, корректность дерева обусловлена корректностью всех составляющих его элементов.Наиболее общим методом валидации является метод DomainSolvingModel.validate, который проверяет корректность всех входящих в него моделей. Здесь учитывается следующее:
+<br>Модель домена DomainSolvingModel.domainModel проверяется на <a data-tooltip-position="top" aria-label="Модель предметной области > Валидация модели" data-href="Модель предметной области#Валидация модели" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html#Валидация модели" class="internal-link" target="_self" rel="noopener nofollow">полную корректность</a> <br>Все теговые части модели из DomainSolvingModel.tagsData проверяются на <a data-tooltip-position="top" aria-label="Модель предметной области > Валидация модели" data-href="Модель предметной области#Валидация модели" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html#Валидация модели" class="internal-link" target="_self" rel="noopener nofollow">полную корректность</a>, с учетом того, что при использовании они объединяются с общей моделью DomainSolvingModel.domainModel Деревья решений из DomainSolvingModel.decisionTrees проверяются на корректность с учетом того, что при использовании они должны мочь работать с любой из объединенных теговых моделей (т.е. валидация происходит для всех тегов)
+]]></description><link>1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Дерево решений/Дерево (граф) решений.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate><enclosure url="images/decision_tree_sample.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;images/decision_tree_sample.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Выражения]]></title><description><![CDATA[В данном разделе описывается язык выражений, представляющих конкретные действия или рассуждения, выполняемые над <a data-tooltip-position="top" aria-label="Модель предметной области" data-href="Модель предметной области" href="1.-модели-(its_domainmodel)/модель-предметной-области/модель-предметной-области.html" class="internal-link" target="_self" rel="noopener nofollow">моделью предметной области</a>. Данные выражения чаще всего используются в составе <a data-tooltip-position="top" aria-label="Узлы" data-href="Узлы" href="1.-модели-(its_domainmodel)/дерево-решений/узлы.html" class="internal-link" target="_self" rel="noopener nofollow">узлов</a> <a data-tooltip-position="top" aria-label="Дерево (граф) решений" data-href="Дерево (граф) решений" href="1.-модели-(its_domainmodel)/дерево-решений/дерево-(граф)-решений.html" class="internal-link" target="_self" rel="noopener nofollow">деревьев решений</a>, но могут использоваться и отдельно.
+Данный раздел соответствует пакету its.model.expressions в коде.Выражения выражают конкретные действия или рассуждения, выполняемые над моделью предметной области. Это подразумевает некоторую логику получения и/или изменения данных, хранящихся в модели предметной области (DomainModel).Каждый вид выражений в коде представлен отдельным классом-наследником от класса Operator, и может иметь дочерние выражения (операнды), представленные списком Operator.children.
+Выражения также имеют возвращаемый тип, представленный функцией Operator.resolvedType(DomainModel) (в общем случае тип выражения может зависеть от определений в модели предметной области).Ниже в данном разделе будут приведены все поддерживаемые виды выражений, и для каждого из них будет приведена их текстовая форма записи.<br>
+Данная текстовая форма считается частью <a data-href="LOQI" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html" class="internal-link" target="_self" rel="noopener nofollow">LOQI</a>-синтаксиса, хотя и не используется в обычных .loqi файлах (поскольку LOQI описывает в первую очередь модель предметной области, где выражений нет). Эта запись выражений ("LOQI-выражения") имеет некоторые общие синтаксические конструкции с обычной LOQI-записью модели, в связи с чем вынесена в ту же грамматику LoqiGrammar.g4Приоритеты в таблице расположены от наибольшего к наименьшемуДалее будут подробно рассмотрены отдельные виды выражений.Литералы-константы представляют некоторую константу, записываемую в выражении.
+В коде все они являются наследниками ValueLiteral и имеют следующее содержание:
+ValueLiteral.value - конкретное значение константы, представленное литералом. Имеет тип, соответствующий литералу.
+<br>ValueLiteral.type - <a data-tooltip-position="top" aria-label="Типы данных" data-href="Типы данных" href="1.-модели-(its_domainmodel)/модель-предметной-области/типы-данных.html" class="internal-link" target="_self" rel="noopener nofollow">тип данных</a> значения данного литерала.
+<br>Данные литералы полностью соответствуют <a data-tooltip-position="top" aria-label="LOQI > Значения" data-href="LOQI#Значения" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Значения" class="internal-link" target="_self" rel="noopener nofollow">значениям, описанным в разделе о LOQI</a>.
+В коде они представлены:
+Строковые константы (Строковый литерал) - StringLiteral
+Целые числа (Целочисленный литерал) - IntegerLiteral
+Дробные числа (Вещественный литерал) - DoubleLiteral
+Булевы значения (Булев литерал) - BooleanLiteral
+Значения перечисления (Перечислимый литерал) - EnumLiteral
+Под ссылочными литерами подразумевается получение некоторой сущности по ссылающемуся на него имени.
+В коде все они являются наследниками ReferenceLiteral и имеют следующее содержание:
+ReferenceLiteral.name - имя, по которому происходит ссылка.
+<br>Important
+Здесь и далее в этом разделе под именами подразумеваются идентификаторы, <a data-tooltip-position="top" aria-label="LOQI > Идентификаторы (Имена)" data-href="LOQI#Идентификаторы (Имена)" href="1.-модели-(its_domainmodel)/модель-предметной-области/представления-данных/loqi.html#Идентификаторы (Имена)" class="internal-link" target="_self" rel="noopener nofollow">определенные в разделе про LOQI</a> - см. туда для подробностей.
+Синтаксис:&lt;имя переменной&gt;
+Примеры: X, Y, MyVar
+(по конвенции стараемся использовать PascalCase - т.е. запись с большой буквы - для переменных дерева решений, для того чтобы было легче отличать от контекстных переменных)Смысл: Получить (вернуть) объект, записанный в переменную дерева решений.
+Возвращаемый тип: объект (ObjectType) соответствующего переменной класса (ObjectType.className)
+В коде: DecisionTreeVarLiteralВалидация:
+Переменная, обозначенная данным именем, должна существовать в контексте валидации выражения (т.е. должна быть объявлена где-то в дереве решений, чтобы она могла быть использована в выражении)
+Синтаксис:$&lt;имя переменной&gt;
+Примеры: x1, y1, someVar
+(по конвенции стараемся использовать camelCase - т.е. запись с маленькой буквы - для контекстных переменных, для того чтобы было легче отличать от переменных дерева решений)Смысл: Получить объект, записанный в контекстную переменную.
+Контекстные переменные отличаются от переменных дерева решений тем, что контекстные переменные вводятся внутри выражений и используются только внутри вводящих их выражений, а переменные дерева решений вводятся в узлах дерева решений и могут использоваться в различных выражениях.
+Возвращаемый тип: объект (ObjectType) соответствующего переменной класса (ObjectType.className)
+В коде: VariableLiteralВалидация:
+Переменная, обозначенная данным именем, должна существовать в контексте валидации выражения (т.е. должна быть объявлена в выражении выше, чтобы она могла быть использована)
+Синтаксис:class:&lt;имя класса&gt;
+Примеры: class:MyClassСмысл: Получить класс, объявленный в модели, по его имени
+Возвращаемый тип: класс (ClassType), наследующийся от соответствующего класса (ClassType.className)
+В коде: ClassLiteralВалидация:
+В модели предметной области должен существовать класс с соответствующим именем.
+Синтаксис:obj:&lt;имя объекта&gt;
+Примеры: obj:someObjСмысл: Получить (вернуть) объект, объявленный в модели, по его имени.
+Возвращаемый тип: объект (ObjectType) соответствующего класса.
+В коде: ObjectLiteralВалидация:
+В модели предметной области должен существовать объект с соответствующим именем. Обратите внимание, что в контексте дерева решений, выражения валидируются относительно определенной заранее модели предметной области. В подобных моделях объектов зачастую нет - поэтому обращаться к объектам по имени нельзя. Исключение из этого правила составляют "системные" объекты, которые существуют в модели предметной области всегда. Синтаксис:&lt;выражение-объект&gt; is &lt;выражение-класс&gt;
+Примеры: X is class:OperatorСмысл: проверить, является ли объект экземпляром переданного класса. Данное выражение учитывает наследование (т.е. объект может быть не прямым наследником класса).
+Возвращаемый тип: булев (BooleanType) - true если является экземпляром, false иначе.
+В коде: CheckClassВалидация:
+Выражение-объект должно возвращать объект (ObjectType)
+Выражение-класс должно возвращать класс (ClassType)
+Типы объекта и класса должны соответствовать - класс объекта должен быть супертипом для проверяемого класса. Потому что нет смысла проверять объект на принадлежность классу, которому он никогда не может принадлежать. Синтаксис:&lt;выражение-объект&gt; .class()
+Примеры: X is class:OperatorСмысл: получить прямой класс объекта.
+Возвращаемый тип: класс (ClassType), наследующийся от класса выражения-объекта
+В коде: getClassВалидация:
+Выражение-объект должно возвращать объект (ObjectType)
+Синтаксис:
+В базовой форме выражение выглядит так:&lt;выражение-объект&gt; .&lt;имя свойства&gt;
+Примеры: X.myProperty, obj:systemObj.descriptionУ выражения также есть параметризованная форма, для получения свойства по параметрам:&lt;выражение-объект&gt; .&lt;имя свойства&gt; &lt;значения параметров&gt;
+Здесь и далее в этом разделе структура &lt;значения параметров&gt; определена как:&lt; &lt;имя параметра 1&gt; = &lt;выражение-параметр 1&gt;, ... &gt;
+ИЛИ
+&lt; &lt;выражение-параметр 1&gt;, &lt;выражение-параметр 2&gt;, ... &gt;
+(В записи выше треугольные скобки &lt; &gt; в начале и конце строки должны интерпретироваться буквально.)
+Примеры записи значений параметров: &lt;myIntParam=2, myBoolParam=true&gt;, &lt;2, true&gt;
+Примеры записи параметризованной формы выражения получения свойства: X.myPropertyForEnum&lt;MyEnum:FIRST&gt;, Y.priority&lt;placement = Placement:Left, inParenthesis = true&gt;. Смысл: Получить (вернуть) значение свойства объекта. Если выражение параметризовано, то получить значение данного свойства для конкретного набора параметров.
+Возвращаемый тип: в соответствии с типом свойства.
+В коде: GetPropertyValueВалидация:
+Получать значение свойства можно только у объектов (ObjectType)
+Для данного типа объектов должно существовать получаемое свойство (должно быть объявлено в их родительских классах)
+Состав (имя и тип) параметров, переданных в выражении, должен соответствовать параметрам, объявленным для данного свойства
+Если для данного свойства объявлены параметры, то при получении свойства необходимо передать все объявленные параметры (нельзя заполнить параметры частично)
+Синтаксис:&lt;выражение-субъект&gt; =&gt;&lt;имя отношения&gt;[&lt;значения параметров&gt;](&lt;выражение-объект 1&gt;, ...)
+<br>(структура &lt;значения параметров&gt; подробно описана <a data-tooltip-position="top" aria-label="Получение значения свойства" data-href="#Получение значения свойства" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Получение_значения_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">выше</a>)
+Примеры: X=&gt;someRel(Y), X=&gt;isBetween(Y1, Y2), X=&gt;isOperandOf&lt;Placement:Left&gt;(Y)Смысл: Проверить, существует ли между объектами связь по заданному отношению. Если выражение параметризовано, то проверить, существует ли между объектами связь по заданному отношению, которая также содержит заданные значения параметров.
+Возвращаемый тип: булев (BooleanType) - true если связь существует, false если нет.
+В коде: CheckRelationshipВалидация:
+Выражение-субъект и выражения-объекты должны быть объектами (ObjectType)
+Для заданных классов субъекта и объектов должно существовать заданное отношение <br>В данном выражении поддерживается <a data-tooltip-position="top" aria-label="Отношения > Проекция" data-href="Отношения#Проекция" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Проекция" class="internal-link" target="_self" rel="noopener nofollow">проекция</a>, но для этого должно существовать единственное отношение, в которое будет спроецировано указанное. Количество заданных выражений-объектов должно быть равно объявленному для данного отношения количеству объектов
+Состав (имя и тип) параметров, переданных в выражении, должен соответствовать параметрам, объявленным для данного отношения (но можно передать неполный набор параметров).
+Синтаксис:&lt;выражение-субъект&gt; =&gt;&lt;имя отношения&gt;[&lt;значения параметров&gt;](&lt;выражение-объект 1&gt;, ...).&lt;имя получаемого параметра&gt;
+<br>(структура &lt;значения параметров&gt; подробно описана <a data-tooltip-position="top" aria-label="Получение значения свойства" data-href="#Получение значения свойства" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Получение_значения_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">выше</a>)
+Примеры: X=&gt;someRel(Y).myParam, X=&gt;isBetween(Y1, Y2).isAbove, X=&gt;isOperandOf&lt;Placement:Left&gt;(Y).priority<br>Смысл: найти между объектами связь по отношению, аналогично <a data-tooltip-position="top" aria-label="Проверка наличия связи по отношению между объектами" data-href="#Проверка наличия связи по отношению между объектами" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Проверка_наличия_связи_по_отношению_между_объектами_0" class="internal-link" target="_self" rel="noopener nofollow">проверке наличия связи</a>. Если таких связей нет, или их несколько, то будет выброшена ошибка выполнения. Иначе, если такая связь единственная, то получить у нее значение некоторого параметра по его имени.
+Примечания:
+Данное выражение не поддерживает проекцию, в отличие от проверки наличия связи
+<br>Для <a data-tooltip-position="top" aria-label="Отношения > Типы зависимых отношений" data-href="Отношения#Типы зависимых отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Типы зависимых отношений" class="internal-link" target="_self" rel="noopener nofollow">зависимых отношений</a> значения параметров определяются как описано в <a data-tooltip-position="top" aria-label="Отношения > Параметризация" data-href="Отношения#Параметризация" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Параметризация" class="internal-link" target="_self" rel="noopener nofollow">соответствующем разделе</a>.
+Возвращаемый тип: в соответствии с типом получаемого параметра.
+В коде: GetRelationshipParamValue
+Валидация:
+<br>Аналогично <a data-tooltip-position="top" aria-label="Проверка наличия связи по отношению между объектами" data-href="#Проверка наличия связи по отношению между объектами" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Проверка_наличия_связи_по_отношению_между_объектами_0" class="internal-link" target="_self" rel="noopener nofollow">проверке наличия связи</a>.
+Для заданного отношения должен существовать параметр с заданным именем.
+Синтаксис:find &lt;имя типа&gt; &lt;имя переменной поиска&gt; { &lt;выражение-условие поиска&gt; }
+Примеры: find Operator x { $x =&gt;isLeftOf(Y) }Important
+Поиск объектов, удовлетворяющих выражению-условию
+В этом и других типах выражений используется общий механизм поиска объектов по условию.<br>
+Условием обычно считается выражение, возвращающее булево значение, и имеющее внутри себя <a data-tooltip-position="top" aria-label="Контекстная переменная" data-href="#Контекстная переменная" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Контекстная_переменная_0" class="internal-link" target="_self" rel="noopener nofollow">контекстные переменные</a>. Объект считается удовлетворяющим этому условию как переменная &lt;var&gt;, если существующая внутри данного выражения контекстная переменная &lt;var&gt; объявлена с типом, соответствующим типу данного объекта, и если при задании переменной &lt;var&gt; равной этому объекту, выражение-условие возвращает true.
+Например, условием может выступать выражение $person.age &gt;= 18, где переменная $person объявлена с типом Person, и тогда объект obj alice : Person будет считаться удовлетворяющим данному условию как переменная $person, если его свойство .age больше или равно 18. Смысл: найти (вернуть) объект заданного типа, удовлетворяющий выражению условия поиска как переменная поиска. Если таких объектов нет, или их несколько, будет выброшена ошибка выполнения.
+Возвращаемый тип: объект (ObjectType) соответствующего объявленной переменной типа.
+В коде: GetByConditionВалидация:
+Объявленный для переменной тип должен существовать в модели
+Объявляемое имя переменной не должно перекрывать уже существующие в данном контексте переменные.
+Выражение-условие поиска должно возвращать булево значение (BooleanType). Внутри выражения-поиска существует контекстная переменная поиска, объявленная данным оператором. Синтаксис:findExtreme &lt;имя экстремальной переменной&gt; [ &lt;выражение-условие экстремума&gt; ]
+among &lt;имя типа переменной&gt; &lt;имя общей переменной&gt; { &lt;выражение-условие поиска&gt; }
+Примеры: findExtreme x1 [ $x1 =&gt;isLeftOf($xToken) ] among token xToken { $xToken =&gt;belongsTo(X) }<br>Смысл: <a data-tooltip-position="top" aria-label="Поиск объекта по условию" data-href="#Поиск объекта по условию" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Поиск_объекта_по_условию_0" class="internal-link" target="_self" rel="noopener nofollow">найти</a> все объекты заданного типа, удовлетворяющие выражению условия поиска как общая переменная. Среди всех найденных объектов выбрать и вернуть такой, для которого выражение-условие экстремума выполняется при подстановке данного объекта как экстремальной контекстной переменной, и подстановке всех прочих найденных объектов как общей контекстной переменной.
+Если на любом из этапов подходящих объектов нет, или найдено несколько объектов, подходящих под условие экстремума, будет выброшена ошибка выполнения. Данное выражение по сути является синтаксическим сахаром, и может быть выражено через другие, более базовые выражения.
+Так, выражениеfindExtreme extremeVar [ &lt;extremeConditionExpr($extremeVar, $var)&gt; ]
+among type var { &lt;conditionExpr($var)&gt; }
+эквивалентно выражениюfind type extremeVar { &lt;conditionExpr($extremeVar)&gt; and forAll type var [&lt;conditionExpr($var)&gt; and $var != $extremeVar ] { &lt;extremeConditionExpr($extremeVar, $var)&gt; } }
+<br>(См. <a data-tooltip-position="top" aria-label="Поиск объекта по условию" data-href="#Поиск объекта по условию" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Поиск_объекта_по_условию_0" class="internal-link" target="_self" rel="noopener nofollow">поиск объекта по условию</a> и <a data-tooltip-position="top" aria-label="Квантор общности (&quot;Для всех&quot;)" data-href="#Квантор общности (&quot;Для всех&quot;)" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Квантор_общности_(&quot;Для_всех&quot;)_0" class="internal-link" target="_self" rel="noopener nofollow">квантор общности</a> для лучшего понимания выражения выше)Возвращаемый тип: объект (ObjectType) соответствующего объявленной переменной типа.
+В коде: GetExtremeВалидация:
+Объявленный для переменной тип должен существовать в модели
+Объявляемые имена переменных не должны перекрывать уже существующие в данном контексте переменные, а также не должны совпадать
+Выражение-условие поиска должно возвращать булево значение (BooleanType). Внутри выражения-условия поиска существует общая контекстная переменная, объявленная данным оператором. Выражение-условие экстремума должно возвращать булево значение (BooleanType). Внутри выражения-условия экстремума существует общая контекстная переменная, а также экстремальная контекстная переменная, объявленные данным оператором Синтаксис:&lt;выражение-субъект&gt; -&gt;&lt;имя отношения&gt;[&lt;значения параметров&gt;]
+<br>(структура &lt;значения параметров&gt; подробно описана <a data-tooltip-position="top" aria-label="Получение значения свойства" data-href="#Получение значения свойства" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Получение_значения_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">выше</a>)
+Примеры: X-&gt;someRel, X-&gt;isOperandOf&lt;Placement:Left&gt;<br>Смысл: найти (вернуть) объект, с которым субъект связан заданным отношением. Находит для субъекта связи, определенные заданным отношением с заданными параметрами (аналогично <a data-tooltip-position="top" aria-label="Проверка наличия связи по отношению между объектами" data-href="#Проверка наличия связи по отношению между объектами" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Проверка_наличия_связи_по_отношению_между_объектами_0" class="internal-link" target="_self" rel="noopener nofollow">проверке наличия связи</a>), и получает объект данной связи. Если таких связей нет, или их несколько, то будет выброшена ошибка выполнения.Данное выражение по сути является синтаксическим сахаром, и может быть выражено через другие, более базовые выражения.
+Так, выражениеsomeObj-&gt;someRelationship&lt;...&gt;
+эквивалентно выражениюfind type anotherObj { someObj-&gt;someRelationship&lt;...&gt;($anotherObj)
+}
+<br>(См. <a data-tooltip-position="top" aria-label="Поиск объекта по условию" data-href="#Поиск объекта по условию" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Поиск_объекта_по_условию_0" class="internal-link" target="_self" rel="noopener nofollow">поиск объекта по условию</a> и <a data-tooltip-position="top" aria-label="Проверка наличия связи по отношению между объектами" data-href="#Проверка наличия связи по отношению между объектами" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Проверка_наличия_связи_по_отношению_между_объектами_0" class="internal-link" target="_self" rel="noopener nofollow">проверку наличия связи по отношению</a> для лучшего понимания выражения выше)Возвращаемый тип: объект (ObjectType) типа, соответствующего типу объекта связи.
+В коде: GetByRelationshipВалидация:
+Выражение-субъект и выражения-объекты должны быть объектами (ObjectType)
+Для заданных классов субъекта и объектов должно существовать заданное отношение
+Состав (имя и тип) параметров, переданных в выражении, должен соответствовать параметрам, объявленным для данного отношения (но можно передать неполный набор параметров).
+Синтаксис:&lt;выражение 1&gt; and &lt;выражение 2&gt;
+Примеры: $a == $b and $a != $cСмысл: найти логическое И от двух выражений. Второе (правое) выражение не выполняется, если первое (левое) вернуло false
+Возвращаемый тип: булево значение (BooleanType)
+В коде: LogicalAndВалидация:
+Оба выражения-операнда должны возвращать булево значение (BooleanType)
+Синтаксис:&lt;выражение 1&gt; or &lt;выражение 2&gt;
+Примеры: $a == $b or $a != $cСмысл: найти логическое ИЛИ от двух выражений. Второе (правое) выражение не выполняется, если первое (левое) вернуло true
+Возвращаемый тип: булево значение (BooleanType)
+В коде: LogicalOrВалидация:
+Оба выражения-операнда должны возвращать булево значение (BooleanType)
+Синтаксис:not &lt;выражение&gt;
+Примеры: not ($a is class:MyClass)Смысл: вычислить логическое отрицание выражения операнда.
+Возвращаемый тип: булево значение (BooleanType)
+В коде: LogicalNotВалидация:
+Выражение-операнд должно возвращать булево значение (BooleanType)
+Синтаксис:&lt;выражение 1&gt; == &lt;выражение 2&gt;
+&lt;выражение 1&gt; != &lt;выражение 2&gt;
+&lt;выражение 1&gt; &gt; &lt;выражение 2&gt;
+&lt;выражение 1&gt; &gt;= &lt;выражение 2&gt;
+&lt;выражение 1&gt; &lt; &lt;выражение 2&gt;
+&lt;выражение 1&gt; &lt;= &lt;выражение 2&gt;
+Смысл: сравнить значения двух выражений. Поддерживаются сравнения на (не)равество (для всех типов значений), а сравнения на больше/меньше (для численных значений)
+Возвращаемый тип: булево значение (BooleanType)
+В коде: CompareWithComparisonOperatorВалидация:
+Возвращаемые типы выражений-операндов должны быть одинаковы, или приводимы друг к другу (численные типы в данном случае считаются приводимыми друг к другу)
+Сравнения на больше/меньше применимы только к численным типам
+Синтаксис:&lt;выражение 1&gt; .compare( &lt;выражение 2&gt; )
+Смысл: сравнить величину значения двух выражений. Возвращает один из трех вариантов - больше/меньше/равно (относительно первого выражения, т.е. "больше" значит что первое больше второго и т.д.)<br>
+Возвращаемый тип: значение <a data-tooltip-position="top" aria-label="Перечисления (Enum) > &quot;Встроенные&quot; перечисления" data-href="Перечисления (Enum)#&quot;Встроенные&quot; перечисления" href="1.-модели-(its_domainmodel)/модель-предметной-области/перечисления-(enum).html#&quot;Встроенные&quot; перечисления" class="internal-link" target="_self" rel="noopener nofollow">встроенного перечисления</a> Comparison (EnumType)
+В коде: CompareВалидация:
+Возвращаемые типы выражений-операндов должны быть численными
+Синтаксис:forAll &lt;имя типа&gt; &lt;имя переменной квантора&gt; [ &lt;выражение-условие выбора&gt;
+] { &lt;выражение-тело квантора&gt;
+}
+Также допускается более короткая записьforAll &lt;имя типа&gt; &lt;имя переменной квантора&gt; { &lt;выражение-тело квантора&gt;
+}
+когда &lt;выражение-условие выбора&gt; равно true (т.е. выбрать все объекты подходящего типа).
+Примеры:forAll Operand xOp [ $xOp=&gt;isOperandOf(X)
+] { $xOp.state == State:unevaluated
+} forAll Operand op { $op.state = State:evaluated
+}
+<br>Смысл: <a data-tooltip-position="top" aria-label="Поиск объекта по условию" data-href="#Поиск объекта по условию" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Поиск_объекта_по_условию_0" class="internal-link" target="_self" rel="noopener nofollow">найти</a> все объекты, удовлетворяющие условию выбора как переменная квантора. Далее в зависимости от типа выражения-тела квантора:
+Если выражение-тело возвращает булево значение, то вернуть true, если все найденные выше объекты удовлетворяют выражению-телу в качестве условия, как переменная квантора, иначе вернуть false - Проверяющий режим квантора. Обратите внимание, что проверяющий режим предполагает, что повторное или многократное выполнение тела квантора не приведет к изменениям результата выполнения или состояния модели. В связи с этим выполнение может прерваться сразу, если для одного из объектов тело квантора вернуло false. Во избежание нежелательных последствий, в данном режиме не стоит менять состояние модели. Иначе (если выражение-тело имеет другой тип), то выполнить выражение-тело для всех найденных объектов (подставляя объекты в качестве переменной квантора), и ничего не вернуть - Управляющий режим квантора (или режим цикла).
+Возвращаемый тип: булево значение (BooleanType) в проверяющем режиме, или ничего (NoneType) в управляющем режиме
+В коде: ForAllQuantifierВалидация:
+Выражение-условие выбора должно возвращать булево значение (BooleanType). Внутри выражения-условия выбора и выражения-тела квантора существует контекстная переменная квантора, объявленная данным оператором. Синтаксис:forAny &lt;имя типа&gt; &lt;имя переменной квантора&gt; [ &lt;выражение-условие выбора&gt;
+] { &lt;выражение-тело квантора&gt;
+}
+Также допускается более короткая записьforAny &lt;имя типа&gt; &lt;имя переменной квантора&gt; { &lt;выражение-тело квантора&gt;
+}
+когда &lt;выражение-условие выбора&gt; равно true (т.е. выбрать все объекты подходящего типа).
+Примеры:forAny Operand xOp [ $xOp=&gt;isOperandOf(X)
+] { $xOp.state == State:unevaluated
+} forAny Operand op { $op.state = State:evaluated
+}
+<br>Смысл: <a data-tooltip-position="top" aria-label="Поиск объекта по условию" data-href="#Поиск объекта по условию" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Поиск_объекта_по_условию_0" class="internal-link" target="_self" rel="noopener nofollow">найти</a> все объекты, удовлетворяющие условию выбора как переменная квантора. Далее в зависимости от типа выражения-тела квантора:
+Если выражение-тело возвращает булево значение, то вернуть true, если любой из найденных выше объектов удовлетворяет выражению-телу как переменная квантора, иначе вернуть false - Проверяющий режим квантора. Обратите внимание, что проверяющий режим предполагает, что повторное или многократное выполнение тела квантора не приведет к изменениям результата выполнения или состояния модели. В связи с этим выполнение может прерваться сразу, если для одного из объектов тело квантора вернуло true. Во избежание нежелательных последствий, в данном режиме не стоит менять состояние модели. Иначе (если выражение-тело имеет другой тип), то выполнить выражение-тело для одного любого из найденных объектов (подставляя его в качестве переменной квантора), и ничего не вернуть - Управляющий режим квантора (или режим действия). Механизм выбора одного из объектов не определен данной спецификацией. Ожидается, что данный механизм будет использоваться в ситуациях, когда заранее известно, что подходящий объект один. Возвращаемый тип: булево значение (BooleanType) в проверяющем режиме, или ничего (NoneType) в управляющем режиме
+В коде: ExistenceQuantifierВалидация:
+Выражение-условие выбора должно возвращать булево значение (BooleanType). Внутри выражения-условия выбора и выражения-тела квантора существует контекстная переменная квантора, объявленная данным оператором. Синтаксис:&lt;имя переменной&gt; = &lt;выражение-значение&gt;
+Примеры: X = Y-&gt;hasOperand Смысл: (пере)присвоить переменной дерева решений новое значение (объект).
+Возвращаемый тип: отсутствует (NoneType)
+В коде: AssignDecisionTreeVarВалидация:
+Переменная, обозначенная данным именем, должна существовать в контексте валидации выражения (т.е. должна быть объявлена где-то в дереве решений, чтобы она могла быть использована в выражении)
+Выражение-значение должно возвращать объект (ObjectType), чей класс (ObjectType.className) совместим с объявленным для переменной типом.
+Синтаксис:&lt;выражение-объект&gt; .&lt;имя свойства&gt;[&lt;значения параметров&gt;] = &lt;выражение-значение&gt;
+<br>(структура &lt;значения параметров&gt; подробно описана <a data-tooltip-position="top" aria-label="Получение значения свойства" data-href="#Получение значения свойства" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Получение_значения_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">выше</a>)
+Примеры: X.state = State:unevaluated Смысл: (пере)присвоить свойству объекта новое значение.
+Возвращаемый тип: отсутствует (NoneType)
+В коде: AssignPropertyВалидация:
+Получать значение свойства можно только у объектов - выражение-объект должно возвращать объект (ObjectType)
+Для данного типа объектов должно существовать изменяемое свойство (должно быть объявлено в их родительских классах)
+Состав (имя и тип) параметров, переданных в выражении, должен соответствовать параметрам, объявленным для данного свойства
+Если для данного свойства объявлены параметры, то при изменения свойства необходимо передать все объявленные параметры (нельзя заполнить параметры частично)
+Выражение-значение должно возвращать иметь тип, совместимый с объявленным для переменной типом.
+Синтаксис:&lt;выражение-субъект&gt; +=&gt;&lt;имя отношения&gt;[&lt;значения параметров&gt;](&lt;выражение-объект 1&gt;, ...)
+<br>(структура &lt;значения параметров&gt; подробно описана <a data-tooltip-position="top" aria-label="Получение значения свойства" data-href="#Получение значения свойства" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Получение_значения_свойства_0" class="internal-link" target="_self" rel="noopener nofollow">выше</a>)
+Примеры: X+=&gt;isOperandOf&lt;Placement:Left&gt;(Y)Смысл: добавить между указанными объектами связь по отношению.
+Возвращаемый тип: отсутствует (NoneType)
+В коде: AddRelationshipLinkВалидация:
+Выражение-субъект и выражения-объекты должны быть объектами (ObjectType)
+<br>Для заданных классов субъекта и объектов должно существовать заданное отношение, и оно не может быть <a data-tooltip-position="top" aria-label="Отношения > Характеристики отношений" data-href="Отношения#Характеристики отношений" href="1.-модели-(its_domainmodel)/модель-предметной-области/отношения.html#Характеристики отношений" class="internal-link" target="_self" rel="noopener nofollow">зависимым</a>.
+Количество заданных выражений-объектов должно быть равно объявленному для данного отношения количеству объектов
+Состав (имя и тип) параметров, переданных в выражении, должен соответствовать параметрам, объявленным для данного отношения.
+Если для данного отношения объявлены параметры, то при добавлении связи необходимо передать все объявленные параметры (нельзя заполнить параметры частично).
+Синтаксис:( &lt;выражение&gt; )
+<br>Смысл: явно указать больший приоритет для вложенного выражения - в случаях, когда <a data-tooltip-position="top" aria-label="Таблица приоритетов выражений" data-href="#Таблица приоритетов выражений" href="1.-модели-(its_domainmodel)/дерево-решений/выражения.html#Таблица_приоритетов_выражений_0" class="internal-link" target="_self" rel="noopener nofollow">приоритет по-умолчанию</a> не подходит.
+Обычные скобки, как и везде.
+Возвращаемый тип: аналогичен вложенному выражению.
+В коде отсутствуют (как отдельный класс выражений) - нужны только для парсинга текстовой записи выражений.Синтаксис:&lt;выражение-объект&gt; as &lt;выражение-класс&gt;
+Примеры: X as class:OperatorСмысл: расценивать результат выражения-объекта как объект заданного класса в данном контексте. Если при выполнении окажется, что данный объект не является экземпляром данного класса, то будет выброшена ошибка выполнения.
+Возвращаемый тип: объект (ObjectType) заданного класса.
+В коде: CastВалидация:
+Выражение-объект должно возвращать объект (ObjectType)
+Выражение-класс должно возвращать класс (ClassType)
+Типы объекта и класса должны соответствовать - класс объекта должен быть супертипом для проверяемого класса. Потому что нет смысла пытаться привести объект к классу, которому он никогда не может принадлежать. Синтаксис:
+Тернарная форма:&lt;выражение-условие&gt; ? &lt;выражение-then&gt; : &lt;выражение-else&gt; Примеры: X is Operator ? 1 : 2Условная форма:if(&lt;выражение-условие&gt;) &lt;выражение-then&gt; [else &lt;выражение-else&gt; ]
+Примеры: if(X is Operator) 1 else 2, if(X is Operator) X.state = State:unevaluatedСмысл: в зависимости от наличия выражения-else:
+Если выражение-else есть - Полное условие: Если выражение-условие выполняется, то выполнить выражение-then и вернуть его результат. Иначе выполнить выражение-else и вернуть его результат Если выражение-else отсутствует - Неполное условие: Если выражение-условие выполняется, то выполнить выражение-then. Ничего не возвращать. Возвращаемый тип: ближайший супертип типов -then и -else выражений при полном условии, и ничего (NoneType) при неполном условии.
+В коде: IfThenВалидация:
+Выражение-условие должно возвращать булево значение (BooleanType)
+При полном условии типы -then и -else выражений должны быть приводимы к общему типу (иметь общий супертип).
+Синтаксис:{ &lt;выражение 1&gt; ; &lt;выражение 2&gt; ; ... [;] }
+Смысл: последовательно выполнить вложенные выражения. Вернуть результат последнего выполненного выражения
+Возвращаемый тип: аналогично типу последнего выражения.
+В коде: BlockВалидация: отсутствует]]></description><link>1.-модели-(its_domainmodel)/дерево-решений/выражения.html</link><guid isPermaLink="false">1. Модели (its_DomainModel)/Дерево решений/Выражения.md</guid><pubDate>Fri, 22 Aug 2025 20:48:30 GMT</pubDate></item></channel></rss>
